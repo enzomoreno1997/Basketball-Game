@@ -81,48 +81,49 @@
             user-select: none;
         }
         
-        /* Side Hoop & Backboard (Mas pinaliit) */
+        /* Side Hoop & Backboard */
         #backboard {
             position: absolute;
-            top: 145px;
+            top: 130px;
             right: 40px;
             width: 12px;
             height: 70px;
             background: rgba(255, 255, 255, 0.9);
             border: 2px solid #333;
             border-radius: 2px;
+            z-index: 4;
         }
         #rim {
             position: absolute;
-            top: 195px;
-            right: 52px;
-            width: 32px;
-            height: 10px;
-            border: 2.5px solid #ff3300;
+            top: 185px;
+            right: 50px;
+            width: 35px;
+            height: 12px;
+            border: 3px solid #ff3300;
             border-radius: 3px;
-            z-index: 5;
+            z-index: 6;
         }
         #net {
             position: absolute;
-            top: 204px;
-            right: 54px;
-            width: 28px;
-            height: 30px;
+            top: 195px;
+            right: 52px;
+            width: 30px;
+            height: 35px;
             background: repeating-linear-gradient(45deg, rgba(255,255,255,0.7), rgba(255,255,255,0.7) 3px, transparent 3px, transparent 6px);
             clip-path: polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%);
-            z-index: 4;
+            z-index: 5;
         }
 
-        /* Basketball (Mas maliit na rin) */
+        /* Basketball */
         #ball {
             position: absolute;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             background: radial-gradient(circle at 30% 30%, #ff7700, #b33600);
             border-radius: 50%;
             box-shadow: inset -2px -2px 4px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.4);
             display: none;
-            z-index: 6;
+            z-index: 7;
         }
 
         /* Controls Panel */
@@ -209,7 +210,7 @@
         <!-- Start / Game Over Screens -->
         <div id="start-screen" class="overlay">
             <h2>VCA Shootout</h2>
-            <p>Mas swak na ang laki ng bola at ring ngayon! I-drag lang ang bola pabalik at i-release papuntang kanan para i-shoot.</p>
+            <p>Inayos ko na ang tamang sakto ng ring at bola! I-drag pabalik at i-release para makapuntos.</p>
             <button onclick="startGame()">Simulan ang Laro</button>
         </div>
 
@@ -249,17 +250,18 @@
         let isPlaying = false;
         let isShotActive = false;
 
+        // Mga pwesto ng pagtira
         const spots = {
-            'short': { x: 280, y: 390, name: 'Short Corner' },
-            'wing': { x: 180, y: 390, name: 'Wing 3PT' },
-            'deep': { x: 80, y: 390, name: 'Deep Logo 3' }
+            'short': { x: 220, y: 390, name: 'Short Corner' },
+            'wing': { x: 120, y: 390, name: 'Wing 3PT' },
+            'deep': { x: 60, y: 390, name: 'Deep Logo 3' }
         };
 
         let currentSpotKey = 'wing';
         let ballPos = { x: spots['wing'].x, y: spots['wing'].y };
 
         let velocity = { x: 0, y: 0 };
-        let gravity = 0.38;
+        let gravity = 0.35;
 
         let isDragging = false;
         let dragStart = { x: 0, y: 0 };
@@ -306,8 +308,8 @@
             ballPos.x = spot.x;
             ballPos.y = spot.y;
             ball.style.display = 'block';
-            ball.style.left = (ballPos.x - 10) + 'px';
-            ball.style.top = (ballPos.y - 10) + 'px';
+            ball.style.left = (ballPos.x - 12) + 'px';
+            ball.style.top = (ballPos.y - 12) + 'px';
             isShotActive = false;
         }
 
@@ -326,8 +328,8 @@
             const dragEndX = clientX - rect.left;
             const dragEndY = clientY - rect.top;
 
-            const powerX = (dragStart.x - dragEndX) * 0.13;
-            const powerY = (dragStart.y - dragEndY) * 0.13;
+            const powerX = (dragStart.x - dragEndX) * 0.135;
+            const powerY = (dragStart.y - dragEndY) * 0.135;
 
             shootBall(powerX, powerY);
         }
@@ -361,12 +363,12 @@
                 ballPos.y += velocity.y;
                 velocity.y += gravity;
 
-                ball.style.left = (ballPos.x - 10) + 'px';
-                ball.style.top = (ballPos.y - 10) + 'px';
+                ball.style.left = (ballPos.x - 12) + 'px';
+                ball.style.top = (ballPos.y - 12) + 'px';
 
-                // Adjusted Rim Hitbox para sa mas maliit na ring
-                if (!hasCheckedScore && ballPos.y >= 190 && ballPos.y <= 202) {
-                    if (ballPos.x >= 375 && ballPos.x <= 405 && velocity.y > 0) {
+                // Sakto at eksaktong boundary ng rim (Rim Y: 185, X: 365 hanggang 400)
+                if (!hasCheckedScore && ballPos.y >= 180 && ballPos.y <= 192) {
+                    if (ballPos.x >= 365 && ballPos.x <= 405 && velocity.y > 0) {
                         hasCheckedScore = true;
                         score += 3;
                         scoreDisplay.textContent = score;
@@ -375,6 +377,7 @@
                     }
                 }
 
+                // Kapag lumagpas na sa screen o bumagsak
                 if (ballPos.y > 500 || ballPos.x < 0 || ballPos.x > 450) {
                     setTimeout(resetBall, 300);
                     return;
@@ -389,5 +392,4 @@
         resetBall();
     </script>
 </body>
-    </html>
-    
+</html>
