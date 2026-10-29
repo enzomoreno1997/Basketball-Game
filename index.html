@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>3-Point Basketball Shootout Game</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            touch-action: manipulation;
         }
         body {
             background: #111;
@@ -22,18 +23,20 @@
             overflow: hidden;
         }
         h1 {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             margin-bottom: 5px;
             color: #ff6600;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            text-align: center;
         }
         #game-container {
             position: relative;
-            width: 800px;
-            height: 550px;
+            width: 100%;
+            max-width: 450px;
+            height: 480px;
             background: linear-gradient(to bottom, #1a2a6c, #b21f1f, #fdbb2d);
-            border: 4px solid #fff;
+            border: 3px solid #fff;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
@@ -41,16 +44,16 @@
         /* HUD / Scoreboard */
         #hud {
             position: absolute;
-            top: 15px;
-            left: 20px;
-            right: 20px;
+            top: 10px;
+            left: 10px;
+            right: 10px;
             display: flex;
             justify-content: space-between;
-            font-size: 1.2rem;
+            font-size: 0.95rem;
             font-weight: bold;
             background: rgba(0, 0, 0, 0.6);
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
             z-index: 10;
         }
         .hud-item span {
@@ -61,86 +64,93 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 180px;
+            height: 150px;
             background: #d35400;
-            border-top: 4px solid #fff;
-            perspective: 300px;
+            border-top: 3px solid #fff;
         }
         .three-point-arc {
             position: absolute;
-            top: -150px;
+            top: -120px;
             left: 50%;
             transform: translateX(-50%);
-            width: 600px;
-            height: 300px;
-            border: 4px dashed rgba(255, 255, 255, 0.6);
+            width: 380px;
+            height: 220px;
+            border: 3px dashed rgba(255, 255, 255, 0.6);
             border-radius: 50%;
         }
         /* Hoop & Backboard */
         #backboard {
             position: absolute;
-            top: 70px;
+            top: 55px;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
-            height: 80px;
+            width: 90px;
+            height: 60px;
             background: rgba(255, 255, 255, 0.9);
-            border: 3px solid #333;
+            border: 2px solid #333;
             border-radius: 4px;
         }
         #rim {
             position: absolute;
-            top: 130px;
+            top: 105px;
             left: 50%;
             transform: translateX(-50%);
-            width: 60px;
-            height: 15px;
-            border: 4px solid #ff3300;
+            width: 48px;
+            height: 12px;
+            border: 3px solid #ff3300;
             border-radius: 50%;
             z-index: 5;
         }
         #net {
             position: absolute;
-            top: 142px;
+            top: 114px;
             left: 50%;
             transform: translateX(-50%);
-            width: 50px;
-            height: 45px;
-            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.7), rgba(255,255,255,0.7) 5px, transparent 5px, transparent 10px);
+            width: 40px;
+            height: 35px;
+            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.7), rgba(255,255,255,0.7) 4px, transparent 4px, transparent 8px);
             clip-path: polygon(10% 0%, 90% 0%, 75% 100%, 25% 100%);
             z-index: 4;
         }
         /* Basketball */
         #ball {
             position: absolute;
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             background: radial-gradient(circle at 30% 30%, #ff7700, #b33600);
             border-radius: 50%;
-            box-shadow: inset -4px -4px 8px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.4);
+            box-shadow: inset -3px -3px 6px rgba(0,0,0,0.5), 0 3px 6px rgba(0,0,0,0.4);
             display: none;
             z-index: 6;
         }
-        /* Aiming Guide & Controls Panel */
+        /* Controls Panel */
         #controls-panel {
-            margin-top: 15px;
+            margin-top: 10px;
             display: flex;
-            gap: 15px;
+            flex-direction: column;
+            gap: 8px;
             align-items: center;
+            width: 100%;
+            max-width: 450px;
+            padding: 0 10px;
+        }
+        .control-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
         }
         button, select {
-            padding: 10px 20px;
-            font-size: 1rem;
+            padding: 10px 15px;
+            font-size: 0.95rem;
             font-weight: bold;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             background: #ff6600;
             color: white;
-            transition: background 0.2s;
         }
-        button:hover { background: #e55b00; }
-        select { background: #333; color: #fff; border: 1px solid #777; }
+        select { background: #333; color: #fff; border: 1px solid #777; flex: 1; }
         
         /* Overlay Screens */
         .overlay {
@@ -158,27 +168,27 @@
             text-align: center;
             padding: 20px;
         }
-        .overlay h2 { font-size: 2.5rem; margin-bottom: 10px; color: #ffcc00; }
-        .overlay p { font-size: 1.1rem; margin-bottom: 20px; color: #ccc; }
+        .overlay h2 { font-size: 2rem; margin-bottom: 10px; color: #ffcc00; }
+        .overlay p { font-size: 0.95rem; margin-bottom: 20px; color: #ccc; line-height: 1.4; }
         
-        /* Instructions helper */
         #instructions {
-            margin-top: 10px;
-            font-size: 0.9rem;
+            margin-top: 5px;
+            font-size: 0.8rem;
             color: #aaa;
             text-align: center;
+            padding: 0 10px;
         }
     </style>
 </head>
 <body>
 
-    <h1>3-Point Shootout Challenge</h1>
+    <h1>3-Point Shootout</h1>
 
     <div id="game-container">
         <!-- HUD / Score & Timer -->
         <div id="hud">
             <div class="hud-item">Score: <span id="score">0</span></div>
-            <div class="hud-item">Range/Spot: <span id="current-spot">Top of Key</span></div>
+            <div class="hud-item">Spot: <span id="current-spot">Top</span></div>
             <div class="hud-item">Time: <span id="timer">45</span>s</div>
         </div>
 
@@ -196,30 +206,31 @@
 
         <!-- Start / Game Over Screens -->
         <div id="start-screen" class="overlay">
-            <h2>NBA 3-Point Contest</h2>
-            <p>Score as many 3-pointers as you can before the 45-second timer runs out!<br>Click and drag your mouse/touch to aim power and angle, then release to shoot.</p>
-            <button onclick="startGame()">Start Game</button>
+            <h2>3-Point Contest</h2>
+            <p>I-swipe o i-drag ang daliri pataas o paitaas sa screen para i-adjust ang lakas at anggulo ng tira bago maubos ang 45 segundo!</p>
+            <button onclick="startGame()">Simulan ang Laro</button>
         </div>
 
         <div id="gameover-screen" class="overlay" style="display: none;">
-            <h2>Time's Up!</h2>
-            <p>Your Final Score: <span id="final-score" style="color: #ffcc00; font-weight: bold;">0</span></p>
-            <button onclick="startGame()">Play Again</button>
+            <h2>Tapos na ang Oras!</h2>
+            <p>Final Score mo: <span id="final-score" style="color: #ffcc00; font-weight: bold;">0</span></p>
+            <button onclick="startGame()">Maglaro Uli</button>
         </div>
     </div>
 
     <!-- Controls & Options -->
     <div id="controls-panel">
-        <label for="spot-select">Select Shooting Range / Spot:</label>
-        <select id="spot-select" onchange="changeSpot()">
-            <option value="left-corner">Left Corner (Short 3)</option>
-            <option value="left-wing">Left Wing</option>
-            <option value="top" selected>Top of the Key</option>
-            <option value="right-wing">Right Wing</option>
-            <option value="right-corner">Right Corner (Short 3)</option>
-        </select>
+        <div class="control-row">
+            <select id="spot-select" onchange="changeSpot()">
+                <option value="left-corner">Left Corner</option>
+                <option value="left-wing">Left Wing</option>
+                <option value="top" selected>Top of the Key</option>
+                <option value="right-wing">Right Wing</option>
+                <option value="right-corner">Right Corner</option>
+            </select>
+        </div>
     </div>
-    <div id="instructions">💡 Click & drag anywhere on the court to aim power/angle, release to shoot!</div>
+    <div id="instructions">💡 I-drag at i-release ang bola para tumira sa ring!</div>
 
     <script>
         const container = document.getElementById('game-container');
@@ -232,30 +243,27 @@
         const spotSelect = document.getElementById('spot-select');
         const currentSpotLabel = document.getElementById('current-spot');
 
-        // Game State Variables
         let score = 0;
         let timeLeft = 45;
         let gameInterval = null;
         let isPlaying = false;
         let isShotActive = false;
 
-        // Shooting Spot Coordinates (X, Y relative to container)
+        // Relative coordinates para sa 450x480 container size
         const spots = {
-            'left-corner': { x: 120, y: 460, name: 'Left Corner' },
-            'left-wing': { x: 220, y: 420, name: 'Left Wing' },
-            'top': { x: 400, y: 400, name: 'Top of the Key' },
-            'right-wing': { x: 580, y: 420, name: 'Right Wing' },
-            'right-corner': { x: 680, y: 460, name: 'Right Corner' }
+            'left-corner': { x: 60, y: 400, name: 'Left Corner' },
+            'left-wing': { x: 120, y: 360, name: 'Left Wing' },
+            'top': { x: 225, y: 340, name: 'Top' },
+            'right-wing': { x: 330, y: 360, name: 'Right Wing' },
+            'right-corner': { x: 390, y: 400, name: 'Right Corner' }
         };
 
         let currentSpotKey = 'top';
         let ballPos = { x: spots['top'].x, y: spots['top'].y };
 
-        // Physics variables
         let velocity = { x: 0, y: 0 };
         let gravity = 0.35;
 
-        // Dragging variables for aiming
         let isDragging = false;
         let dragStart = { x: 0, y: 0 };
 
@@ -301,41 +309,57 @@
             ballPos.x = spot.x;
             ballPos.y = spot.y;
             ball.style.display = 'block';
-            ball.style.left = (ballPos.x - 16) + 'px';
-            ball.style.top = (ballPos.y - 16) + 'px';
+            ball.style.left = (ballPos.x - 14) + 'px';
+            ball.style.top = (ballPos.y - 14) + 'px';
             ball.style.transform = 'scale(1)';
             isShotActive = false;
         }
 
-        // Mouse / Touch Event Listeners for Shooting Drag Mechanic
-        container.addEventListener('mousedown', (e) => {
+        // Unified Handle Start (Mouse & Touch)
+        function handleDragStart(clientX, clientY) {
             if (!isPlaying || isShotActive) return;
             isDragging = true;
             const rect = container.getBoundingClientRect();
-            dragStart.x = e.clientX - rect.left;
-            dragStart.y = e.clientY - rect.top;
-        });
+            dragStart.x = clientX - rect.left;
+            dragStart.y = clientY - rect.top;
+        }
 
-        window.addEventListener('mouseup', (e) => {
+        // Unified Handle End (Mouse & Touch)
+        function handleDragEnd(clientX, clientY) {
             if (!isDragging || !isPlaying || isShotActive) return;
             isDragging = false;
             const rect = container.getBoundingClientRect();
-            const dragEndX = e.clientX - rect.left;
-            const dragEndY = e.clientY - rect.top;
+            const dragEndX = clientX - rect.left;
+            const dragEndY = clientY - rect.top;
 
-            // Calculate pull-back vector (Inverted to launch forward toward the hoop)
             const powerX = (dragStart.x - dragEndX) * 0.12;
             const powerY = (dragStart.y - dragEndY) * 0.12;
 
             shootBall(powerX, powerY);
-        });
+        }
+
+        // Mouse Events
+        container.addEventListener('mousedown', (e) => handleDragStart(e.clientX, e.clientY));
+        window.addEventListener('mouseup', (e) => handleDragEnd(e.clientX, e.clientY));
+
+        // Touch Events for Mobile
+        container.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 0) {
+                handleDragStart(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchend', (e) => {
+            if (e.changedTouches.length > 0) {
+                handleDragEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+            }
+        }, { passive: true });
 
         function shootBall(vx, vy) {
             isShotActive = true;
             velocity.x = vx;
             velocity.y = vy;
 
-            let scored = false;
             let hasCheckedScore = false;
 
             function updatePhysics() {
@@ -345,29 +369,25 @@
                 ballPos.y += velocity.y;
                 velocity.y += gravity;
 
-                // Render ball position & scale down to simulate depth
-                ball.style.left = (ballPos.x - 16) + 'px';
-                ball.style.top = (ballPos.y - 16) + 'px';
+                ball.style.left = (ballPos.x - 14) + 'px';
+                ball.style.top = (ballPos.y - 14) + 'px';
                 
-                let depthScale = Math.max(0.4, 1 - (450 - ballPos.y) / 500);
+                let depthScale = Math.max(0.4, 1 - (380 - ballPos.y) / 400);
                 ball.style.transform = `scale(${depthScale})`;
 
-                // Rim collision / Scoring check box (Rim coordinates approx: x: 370 to 430, y: 130)
-                if (!hasCheckedScore && ballPos.y >= 125 && ballPos.y <= 140) {
-                    if (ballPos.x >= 375 && ballPos.x <= 425 && velocity.y > 0) {
-                        scored = true;
+                // Rim Check (X: 200 to 250, Y: 100 to 112)
+                if (!hasCheckedScore && ballPos.y >= 100 && ballPos.y <= 112) {
+                    if (ballPos.x >= 210 && ballPos.x <= 240 && velocity.y > 0) {
                         hasCheckedScore = true;
                         score += 3;
                         scoreDisplay.textContent = score;
-                        // Visual feedback flash
                         scoreDisplay.style.color = '#00ff00';
                         setTimeout(() => scoreDisplay.style.color = '#ffcc00', 300);
                     }
                 }
 
-                // Check boundaries (missed shot or made shot falling off screen)
-                if (ballPos.y > 570 || ballPos.x < 0 || ballPos.x > 800) {
-                    setTimeout(resetBall, 400);
+                if (ballPos.y > 500 || ballPos.x < 0 || ballPos.x > 450) {
+                    setTimeout(resetBall, 300);
                     return;
                 }
 
@@ -377,7 +397,6 @@
             requestAnimationFrame(updatePhysics);
         }
 
-        // Initialize display spot on load
         resetBall();
     </script>
 </body>
