@@ -1,410 +1,155 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VCA 3-Point Shootout Game</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            touch-action: manipulation;
-        }
-        body {
-            background: #111;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow: hidden;
-        }
-        h1 {
-            font-size: 1.3rem;
-            margin-bottom: 5px;
-            color: #ff6600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-align: center;
-        }
-        #game-container {
-            position: relative;
-            width: 100%;
-            max-width: 450px;
-            height: 480px;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            border: 3px solid #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        }
-        /* HUD / Scoreboard */
-        #hud {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.95rem;
-            font-weight: bold;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 8px 12px;
-            border-radius: 6px;
-            z-index: 10;
-        }
-        .hud-item span {
-            color: #ffcc00;
-        }
-        /* Side-View Court Graphics */
-        .court-floor {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 120px;
-            background: #d35400;
-            border-top: 4px solid #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        /* VCA Logo sa Sahig */
-        #vca-logo {
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.25);
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            user-select: none;
-        }
-        
-        /* Eksaktong Alignment ng Backboard at Rim */
-        #backboard {
-            position: absolute;
-            top: 130px;
-            right: 30px;
-            width: 12px;
-            height: 75px;
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid #333;
-            border-radius: 2px;
-            z-index: 4;
-        }
-        #rim {
-            position: absolute;
-            top: 185px;
-            right: 42px;
-            width: 36px;
-            height: 12px;
-            border: 3px solid #ff3300;
-            border-radius: 4px;
-            z-index: 6;
-        }
-        #net {
-            position: absolute;
-            top: 196px;
-            right: 44px;
-            width: 32px;
-            height: 38px;
-            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.8), rgba(255,255,255,0.8) 3px, transparent 3px, transparent 6px);
-            clip-path: polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%);
-            z-index: 3;
-        }
-
-        /* Basketball */
-        #ball {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background: radial-gradient(circle at 30% 30%, #ff7700, #b33600);
-            border-radius: 50%;
-            box-shadow: inset -2px -2px 4px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.4);
-            display: none;
-            z-index: 7;
-        }
-
-        /* Controls Panel */
-        #controls-panel {
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            align-items: center;
-            width: 100%;
-            max-width: 450px;
-            padding: 0 10px;
-        }
-        .control-row {
-            display: flex;
-            gap: 10px;
-            width: 100%;
-            justify-content: center;
-        }
-        button, select {
-            padding: 10px 15px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            background: #ff6600;
-            color: white;
-        }
-        select { background: #333; color: #fff; border: 1px solid #777; flex: 1; }
-        
-        /* Overlay Screens */
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 20;
-            text-align: center;
-            padding: 20px;
-        }
-        .overlay h2 { font-size: 2rem; margin-bottom: 10px; color: #ffcc00; }
-        .overlay p { font-size: 0.95rem; margin-bottom: 20px; color: #ccc; line-height: 1.4; }
-        
-        #instructions {
-            margin-top: 5px;
-            font-size: 0.8rem;
-            color: #aaa;
-            text-align: center;
-            padding: 0 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>VCA 3-Point Shootout</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;color:#fff;font-family:'Segoe UI',Tahoma,Verdana,sans-serif;display:flex;flex-direction:column;align-items:center;padding:8px;min-height:100vh}
+h1{font-size:1.2rem;color:#ff6600;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+#wrap{position:relative;width:100%;max-width:450px}
+canvas{width:100%;display:block;border:3px solid #fff;border-radius:12px;touch-action:none;background:#222}
+#hud{display:flex;justify-content:space-between;width:100%;max-width:450px;font-weight:bold;padding:6px 4px;font-size:.95rem}
+#hud span{color:#fc0}
+#spots{display:flex;gap:6px;width:100%;max-width:450px;margin-top:8px}
+button{padding:10px;font-size:.9rem;font-weight:bold;border:none;border-radius:6px;background:#333;color:#fff;flex:1;cursor:pointer}
+button.on{background:#f60}
+.ov{position:absolute;inset:0;background:rgba(0,0,0,.85);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;gap:12px}
+.ov h2{color:#fc0;font-size:1.8rem}
+.ov p{color:#ccc;font-size:.9rem;line-height:1.4}
+.ov button{flex:none;background:#f60;padding:12px 22px}
+#tip{font-size:.8rem;color:#aaa;margin-top:8px;text-align:center}
+</style>
 </head>
 <body>
+<h1>VCA 3-Point Shootout</h1>
+<div id="hud"><div>Score: <span id="sc">0</span></div><div>Spot: <span id="sp">Wing 3PT</span></div><div>Oras: <span id="tm">45</span>s</div></div>
+<div id="wrap">
+<canvas id="c" width="450" height="480"></canvas>
+<div id="start" class="ov"><h2>VCA Shootout</h2><p>I-drag paatras (parang tirador) at bitawan para mag-shoot. May backboard, rim bounce at roll na!</p><button onclick="startGame()">Simulan</button></div>
+<div id="over" class="ov" style="display:none"><h2>Tapos na!</h2><p>Final Score: <b id="fs" style="color:#fc0">0</b></p><button onclick="startGame()">Maglaro Uli</button></div>
+</div>
+<div id="spots"></div>
+<div id="tip">💡 I-drag palayo sa ring, may guide na tuldok. Bitawan para i-shoot.</div>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const W=450,H=480,R=12,G=0.3,GY=410;
+const RIM={fx:362,bx:410,y:190},BB={x:410,w:8,t:105,b:200};
+const SPOTS={short:{x:285,pts:2,name:'Mid 2PT'},wing:{x:140,pts:3,name:'Wing 3PT'},deep:{x:50,pts:4,name:'Logo 4PT'}};
+let spot='wing',score=0,timeLeft=45,playing=false,timer=null,sway=0,pop=null;
+const b={x:0,y:0,vx:0,vy:0,rot:0,active:false,scored:false,hit:false,landed:false,landT:0,frames:0};
+let drag=null;
 
-    <h1>VCA 3-Point Shootout</h1>
+// spot buttons
+const sb=document.getElementById('spots');
+for(const k in SPOTS){const e=document.createElement('button');e.textContent=SPOTS[k].name;e.dataset.k=k;e.onclick=()=>setSpot(k);sb.appendChild(e)}
+function setSpot(k){spot=k;document.getElementById('sp').textContent=SPOTS[k].name;[...sb.children].forEach(e=>e.classList.toggle('on',e.dataset.k===k));if(!b.active)resetBall()}
+function resetBall(){b.x=SPOTS[spot].x;b.y=335;b.vx=b.vy=0;b.active=false;b.scored=false;b.hit=false;b.landed=false;b.frames=0}
+function startGame(){document.getElementById('start').style.display='none';document.getElementById('over').style.display='none';score=0;timeLeft=45;document.getElementById('sc').textContent=0;document.getElementById('tm').textContent=45;playing=true;resetBall();clearInterval(timer);timer=setInterval(()=>{timeLeft--;document.getElementById('tm').textContent=timeLeft;if(timeLeft<=0){clearInterval(timer);playing=false;b.active=false;document.getElementById('fs').textContent=score;document.getElementById('over').style.display='flex'}},1000)}
 
-    <div id="game-container">
-        <!-- HUD / Score & Timer -->
-        <div id="hud">
-            <div class="hud-item">Score: <span id="score">0</span></div>
-            <div class="hud-item">Range: <span id="current-spot">Wing 3PT</span></div>
-            <div class="hud-item">Time: <span id="timer">45</span>s</div>
-        </div>
+// input
+function pos(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
+cv.addEventListener('pointerdown',e=>{if(!playing||b.active)return;cv.setPointerCapture(e.pointerId);const p=pos(e);drag={sx:p.x,sy:p.y,cx:p.x,cy:p.y}});
+cv.addEventListener('pointermove',e=>{if(!drag)return;const p=pos(e);drag.cx=p.x;drag.cy=p.y});
+cv.addEventListener('pointerup',()=>{if(!drag)return;const v=power();drag=null;if(Math.hypot(v.x,v.y)<2)return;b.vx=v.x;b.vy=v.y;b.active=true;b.frames=0});
+cv.addEventListener('pointercancel',()=>drag=null);
+function power(){let x=(drag.sx-drag.cx)*0.13,y=(drag.sy-drag.cy)*0.13;const m=Math.hypot(x,y);if(m>17){x*=17/m;y*=17/m}return{x,y}}
 
-        <!-- Side Court Elements -->
-        <div id="backboard"></div>
-        <div id="rim"></div>
-        <div id="net"></div>
+// physics
+function hitPoint(cx,cy,r,e){const dx=b.x-cx,dy=b.y-cy,d=Math.hypot(dx,dy),m=R+r;if(d<m&&d>0){const nx=dx/d,ny=dy/d;b.x=cx+nx*m;b.y=cy+ny*m;const vn=b.vx*nx+b.vy*ny;if(vn<0){b.vx-=(1+e)*vn*nx;b.vy-=(1+e)*vn*ny;b.vx*=.985;b.vy*=.985;if(Math.abs(vn)>1)b.hit=true}}}
+function hitBoard(){const cx=Math.max(BB.x,Math.min(b.x,BB.x+BB.w)),cy=Math.max(BB.t,Math.min(b.y,BB.b));let dx=b.x-cx,dy=b.y-cy,d=Math.hypot(dx,dy);if(d<R){if(d===0){dx=-1;dy=0;d=1}const nx=dx/d,ny=dy/d;b.x=cx+nx*R;b.y=cy+ny*R;const vn=b.vx*nx+b.vy*ny;if(vn<0){b.vx-=1.6*vn*nx;b.vy-=1.6*vn*ny;b.vy*=.97;b.hit=true}}}
+function step(dt){
+  const py=b.y;b.vy+=G*dt;b.x+=b.vx*dt;b.y+=b.vy*dt;b.rot+=b.vx*dt*.06;
+  hitBoard();hitPoint(RIM.fx,RIM.y,3,.5);hitPoint(RIM.bx,RIM.y,3,.5);
+  if(b.y>GY-R){b.y=GY-R;if(b.vy>1.2){b.vy*=-.6;b.vx*=.8;if(!b.landed){b.landed=true;b.landT=performance.now()}}else{b.vy=0;b.vx*=.95;if(!b.landed){b.landed=true;b.landT=performance.now()}}}
+  if(!b.scored&&py<RIM.y&&b.y>=RIM.y&&b.vy>0&&b.x>RIM.fx&&b.x<RIM.bx){
+    b.scored=true;const p=SPOTS[spot].pts;score+=p;document.getElementById('sc').textContent=score;sway=1;
+    pop={t:(b.hit?'':'SWISH! ')+'+'+p,life:50};
+  }
+}
+function update(){
+  if(!playing||!b.active)return;
+  for(let i=0;i<4;i++)step(.25);
+  b.frames++;
+  if((b.landed&&performance.now()-b.landT>600)||b.x<-40||b.x>W+40||b.frames>300)resetBall();
+}
 
-        <div class="court-floor">
-            <div id="vca-logo">VÇA</div>
-        </div>
-
-        <!-- The Ball -->
-        <div id="ball"></div>
-
-        <!-- Start / Game Over Screens -->
-        <div id="start-screen" class="overlay">
-            <h2>VCA Shootout</h2>
-            <p>Perfect na ang ring alignment at collision! Subukan nang mag-shoot sa pamamagitan ng pag-drag at pag-release.</p>
-            <button onclick="startGame()">Simulan ang Laro</button>
-        </div>
-
-        <div id="gameover-screen" class="overlay" style="display: none;">
-            <h2>Tapos na ang Oras!</h2>
-            <p>Final Score mo: <span id="final-score" style="color: #ffcc00; font-weight: bold;">0</span></p>
-            <button onclick="startGame()">Maglaro Uli</button>
-        </div>
-    </div>
-
-    <!-- Controls & Options -->
-    <div id="controls-panel">
-        <div class="control-row">
-            <select id="spot-select" onchange="changeSpot()">
-                <option value="short">Short Corner</option>
-                <option value="wing" selected>Wing 3-Pointer</option>
-                <option value="deep">Deep Logo 3</option>
-            </select>
-        </div>
-    </div>
-    <div id="instructions">💡 I-drag at bitawan ang bola para pumasok sa ring!</div>
-
-    <script>
-        const container = document.getElementById('game-container');
-        const ball = document.getElementById('ball');
-        const scoreDisplay = document.getElementById('score');
-        const timerDisplay = document.getElementById('timer');
-        const finalScoreDisplay = document.getElementById('final-score');
-        const startScreen = document.getElementById('start-screen');
-        const gameOverScreen = document.getElementById('gameover-screen');
-        const spotSelect = document.getElementById('spot-select');
-        const currentSpotLabel = document.getElementById('current-spot');
-
-        let score = 0;
-        let timeLeft = 45;
-        let gameInterval = null;
-        let isPlaying = false;
-        let isShotActive = false;
-
-        const spots = {
-            'short': { x: 220, y: 390, name: 'Short Corner' },
-            'wing': { x: 120, y: 390, name: 'Wing 3PT' },
-            'deep': { x: 60, y: 390, name: 'Deep Logo 3' }
-        };
-
-        let currentSpotKey = 'wing';
-        let ballPos = { x: spots['wing'].x, y: spots['wing'].y };
-
-        let velocity = { x: 0, y: 0 };
-        let gravity = 0.35;
-
-        let isDragging = false;
-        let dragStart = { x: 0, y: 0 };
-
-        function startGame() {
-            startScreen.style.display = 'none';
-            gameOverScreen.style.display = 'none';
-            score = 0;
-            timeLeft = 45;
-            scoreDisplay.textContent = score;
-            timerDisplay.textContent = timeLeft;
-            isPlaying = true;
-            isShotActive = false;
-            resetBall();
-
-            if (gameInterval) clearInterval(gameInterval);
-            gameInterval = setInterval(() => {
-                timeLeft--;
-                timerDisplay.textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(gameInterval);
-                    endGame();
-                }
-            }, 1000);
-        }
-
-        function endGame() {
-            isPlaying = false;
-            finalScoreDisplay.textContent = score;
-            gameOverScreen.style.display = 'flex';
-            ball.style.display = 'none';
-        }
-
-        function changeSpot() {
-            currentSpotKey = spotSelect.value;
-            currentSpotLabel.textContent = spots[currentSpotKey].name;
-            if (!isShotActive) {
-                resetBall();
-            }
-        }
-
-        function resetBall() {
-            const spot = spots[currentSpotKey];
-            ballPos.x = spot.x;
-            ballPos.y = spot.y;
-            ball.style.display = 'block';
-            ball.style.left = (ballPos.x - 12) + 'px';
-            ball.style.top = (ballPos.y - 12) + 'px';
-            isShotActive = false;
-        }
-
-        function handleDragStart(clientX, clientY) {
-            if (!isPlaying || isShotActive) return;
-            isDragging = true;
-            const rect = container.getBoundingClientRect();
-            dragStart.x = clientX - rect.left;
-            dragStart.y = clientY - rect.top;
-        }
-
-        function handleDragEnd(clientX, clientY) {
-            if (!isDragging || !isPlaying || isShotActive) return;
-            isDragging = false;
-            const rect = container.getBoundingClientRect();
-            const dragEndX = clientX - rect.left;
-            const dragEndY = clientY - rect.top;
-
-            const powerX = (dragStart.x - dragEndX) * 0.135;
-            const powerY = (dragStart.y - dragEndY) * 0.135;
-
-            shootBall(powerX, powerY);
-        }
-
-        container.addEventListener('mousedown', (e) => handleDragStart(e.clientX, e.clientY));
-        window.addEventListener('mouseup', (e) => handleDragEnd(e.clientX, e.clientY));
-
-        container.addEventListener('touchstart', (e) => {
-            if (e.touches.length > 0) {
-                handleDragStart(e.touches[0].clientX, e.touches[0].clientY);
-            }
-        }, { passive: true });
-
-        window.addEventListener('touchend', (e) => {
-            if (e.changedTouches.length > 0) {
-                handleDragEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
-            }
-        }, { passive: true });
-
-        function shootBall(vx, vy) {
-            isShotActive = true;
-            velocity.x = vx;
-            velocity.y = vy;
-
-            let hasCheckedScore = false;
-            let hasHitRim = false;
-
-            function updatePhysics() {
-                if (!isPlaying) return;
-
-                ballPos.x += velocity.x;
-                ballPos.y += velocity.y;
-                velocity.y += gravity;
-
-                ball.style.left = (ballPos.x - 12) + 'px';
-                ball.style.top = (ballPos.y - 12) + 'px';
-
-                // Rim Coordinates Mapping (Tamang-tama sa mismong pwesto ng orange rim sa screen)
-                const rimLeft = 415;
-                const rimRight = 450;
-                const rimTop = 185;
-
-                // Physics check para sa pagtama sa rim (Bounce effect)
-                if (!hasHitRim && velocity.y > 0 && ballPos.y >= rimTop - 5 && ballPos.y <= rimTop + 5) {
-                    if (ballPos.x >= rimLeft - 10 && ballPos.x <= rimLeft + 5) {
-                        // Tumaas nang kaunti o nag-bounce mula sa unahan ng ring
-                        velocity.y = -velocity.y * 0.35;
-                        velocity.x = -velocity.x * 0.5;
-                        hasHitRim = true;
-                    }
-                }
-
-                // Check kung pumasok sa mismong butas ng ring (Swish / Score)
-                if (!hasCheckedScore && ballPos.y >= rimTop + 2 && ballPos.y <= rimTop + 16) {
-                    if (ballPos.x >= rimLeft + 4 && ballPos.x <= rimRight - 5 && velocity.y > 0) {
-                        hasCheckedScore = true;
-                        score += 3;
-                        scoreDisplay.textContent = score;
-                        scoreDisplay.style.color = '#00ff00';
-                        setTimeout(() => scoreDisplay.style.color = '#ffcc00', 300);
-                    }
-                }
-
-                // I-reset ang bola kapag lumagpas na sa screen boundaries
-                if (ballPos.y > 500 || ballPos.x < 0 || ballPos.x > 450) {
-                    setTimeout(resetBall, 250);
-                    return;
-                }
-
-                requestAnimationFrame(updatePhysics);
-            }
-
-            requestAnimationFrame(updatePhysics);
-        }
-
-        resetBall();
-    </script>
+// drawing
+function ell(x,y,rx,ry,a,bb){ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,a,bb);ctx.stroke()}
+function drawCourt(){
+  let g=ctx.createLinearGradient(0,0,W,360);g.addColorStop(0,'#1a2a6c');g.addColorStop(.6,'#b21f1f');g.addColorStop(1,'#fdbb2d');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // floor
+  ctx.fillStyle='#c8631f';ctx.fillRect(0,360,W,120);
+  ctx.strokeStyle='rgba(0,0,0,.15)';ctx.lineWidth=1;
+  for(let x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,360);ctx.lineTo(x,H);ctx.stroke()}
+  ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,360);ctx.lineTo(W,360);ctx.stroke();
+  // boundary lines
+  ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.moveTo(0,368);ctx.lineTo(436,368);ctx.lineTo(436,474);ctx.lineTo(0,474);ctx.stroke();
+  // paint
+  ctx.fillStyle='rgba(140,30,20,.35)';ctx.fillRect(300,390,136,60);
+  ctx.strokeRect(300,390,136,60);
+  ell(300,420,20,30,-Math.PI/2,Math.PI/2);
+  ctx.setLineDash([5,5]);ell(300,420,20,30,Math.PI/2,Math.PI*1.5);ctx.setLineDash([]);
+  // three-point line
+  ctx.beginPath();ctx.moveTo(436,376);ctx.lineTo(330,376);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(436,464);ctx.lineTo(330,464);ctx.stroke();
+  ell(330,420,170,44,Math.PI/2,Math.PI*1.5);
+  // center logo
+  ctx.fillStyle='rgba(255,255,255,.2)';ctx.font='900 38px Segoe UI,Arial';ctx.textAlign='center';ctx.fillText('VCA',225,433);
+  // spot markers
+  for(const k in SPOTS){const s=SPOTS[k];ctx.fillStyle=k===spot?'#fc0':'rgba(255,255,255,.5)';ctx.beginPath();ctx.ellipse(s.x-16,420,12,5,0,0,7);ctx.fill()}
+}
+function drawHoop(){
+  ctx.fillStyle='#444';ctx.fillRect(441,150,8,218);ctx.fillRect(418,150,24,8);
+  ctx.fillStyle='rgba(255,255,255,.95)';ctx.strokeStyle='#333';ctx.lineWidth=2;
+  ctx.fillRect(BB.x,BB.t,BB.w,BB.b-BB.t);ctx.strokeRect(BB.x,BB.t,BB.w,BB.b-BB.t);
+  ctx.strokeStyle='#ff3300';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(RIM.fx,RIM.y);ctx.lineTo(RIM.bx,RIM.y);ctx.stroke();
+  ctx.fillStyle='#ff3300';ctx.beginPath();ctx.arc(RIM.fx,RIM.y,3.5,0,7);ctx.fill();
+}
+function drawNet(){
+  const sw=Math.sin(performance.now()/60)*sway*5,n=6,top=RIM.y+2,bot=RIM.y+36;
+  ctx.strokeStyle='rgba(255,255,255,.75)';ctx.lineWidth=1.2;
+  for(let i=0;i<=n;i++){const tx=RIM.fx+(RIM.bx-RIM.fx)*i/n,bx=374+(398-374)*i/n+sw;
+    ctx.beginPath();ctx.moveTo(tx,top);ctx.lineTo(bx,bot);ctx.stroke();
+    if(i<n){const tx2=RIM.fx+(RIM.bx-RIM.fx)*(i+1)/n,bx2=374+(398-374)*(i+1)/n+sw;ctx.beginPath();ctx.moveTo(tx,top);ctx.lineTo(bx2,bot);ctx.moveTo(tx2,top);ctx.lineTo(bx,bot);ctx.stroke()}}
+  for(let k=1;k<4;k++){const f=k/4,y=top+(bot-top)*f,l=RIM.fx+(374-RIM.fx)*f+sw*f,r=RIM.bx+(398-RIM.bx)*f+sw*f;ctx.beginPath();ctx.moveTo(l,y);ctx.lineTo(r,y);ctx.stroke()}
+  sway*=.95;
+}
+function drawPlayer(){
+  const s=SPOTS[spot],px=s.x-16;
+  ctx.strokeStyle='#fff';ctx.fillStyle='#fff';ctx.lineWidth=4;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(px,364);ctx.lineTo(px,396);ctx.moveTo(px,396);ctx.lineTo(px-6,420);ctx.moveTo(px,396);ctx.lineTo(px+6,420);
+  ctx.moveTo(px,372);ctx.lineTo(px+12,350);ctx.stroke();
+  ctx.beginPath();ctx.arc(px,354,8,0,7);ctx.fill();
+  ctx.lineCap='butt';
+}
+function drawBall(){
+  ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.rot);
+  const g=ctx.createRadialGradient(-4,-4,2,0,0,R);g.addColorStop(0,'#ff8a1f');g.addColorStop(1,'#b33600');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,R,0,7);ctx.fill();
+  ctx.strokeStyle='#3a1500';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(-R,0);ctx.lineTo(R,0);ctx.moveTo(0,-R);ctx.lineTo(0,R);ctx.stroke();
+  ctx.beginPath();ctx.arc(-R*1.2,0,R*.85,-1,1);ctx.stroke();ctx.beginPath();ctx.arc(R*1.2,0,R*.85,Math.PI-1,Math.PI+1);ctx.stroke();
+  ctx.restore();
+}
+function drawAim(){
+  if(!drag||b.active)return;
+  const v=power();let x=b.x,y=b.y,vx=v.x,vy=v.y;
+  for(let i=0;i<16;i++){for(let k=0;k<6;k++){vy+=G*.25;x+=vx*.25;y+=vy*.25}
+    ctx.fillStyle='rgba(255,255,255,'+(0.9-i*.05)+')';ctx.beginPath();ctx.arc(x,y,3,0,7);ctx.fill()}
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);drawCourt();drawHoop();drawPlayer();
+  if(playing||!b.active)drawBall();
+  drawNet();drawAim();
+  if(pop){ctx.fillStyle='rgba(0,255,100,'+Math.min(1,pop.life/20)+')';ctx.font='bold 26px Segoe UI,Arial';ctx.textAlign='center';ctx.fillText(pop.t,330,140-(50-pop.life)*.6);if(--pop.life<=0)pop=null}
+}
+function loop(){update();draw();requestAnimationFrame(loop)}
+setSpot('wing');loop();
+</script>
 </body>
 </html>
