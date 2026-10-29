@@ -22,16 +22,20 @@ button.on{background:#f60}
 .ov p{color:#ccc;font-size:.9rem;line-height:1.4}
 .ov button{flex:none;background:#f60;padding:12px 22px}
 #tip{font-size:.8rem;color:#aaa;margin-top:8px;text-align:center}
+#pick{display:flex;gap:6px;width:100%;max-width:450px;margin-top:8px}
+#pick label{flex:1;font-size:.8rem;color:#ccc;display:flex;flex-direction:column;gap:3px}
+#pick select{padding:8px;border-radius:6px;background:#333;color:#fff;border:1px solid #777;font-size:.9rem}
 </style>
 </head>
 <body>
 <h1>VCA 3-Point Shootout</h1>
-<div id="hud"><div>Score: <span id="sc">0</span></div><div>Spot: <span id="sp">Wing 3PT</span></div><div>Oras: <span id="tm">45</span>s</div></div>
+<div id="hud"><div>Score: <span id="sc">0</span></div><div>Spot: <span id="sp">Wing 3PT</span></div><div>Oras: <span id="tm">2:00</span></div></div>
 <div id="wrap">
 <canvas id="c" width="450" height="480"></canvas>
 <div id="start" class="ov"><h2>VCA Shootout</h2><p>I-drag paatras (parang tirador) at bitawan para mag-shoot. May backboard, rim bounce at roll na!</p><button onclick="startGame()">Simulan</button></div>
 <div id="over" class="ov" style="display:none"><h2>Tapos na!</h2><p>Final Score: <b id="fs" style="color:#fc0">0</b></p><button onclick="startGame()">Maglaro Uli</button></div>
 </div>
+<div id="pick"><label>Player<select id="ps"></select></label><label>Defender<select id="ds"></select></label></div>
 <div id="spots"></div>
 <div id="tip">💡 I-drag palayo sa ring, may guide na tuldok. Iwasan ang defender, i-arko ang tira!</div>
 <script>
@@ -39,7 +43,7 @@ const cv=document.getElementById('c'),ctx=cv.getContext('2d');
 const W=450,H=480,R=12,G=0.3,GY=410;
 const RIM={fx:362,bx:410,y:190},BB={x:410,w:8,t:105,b:200};
 const SPOTS={short:{x:285,pts:2,name:'Mid 2PT'},wing:{x:140,pts:3,name:'Wing 3PT'},deep:{x:50,pts:4,name:'Logo 4PT'}};
-let spot='wing',score=0,timeLeft=45,playing=false,timer=null,sway=0,pop=null;
+let spot='wing',pi=0,di=1,score=0,timeLeft=120,playing=false,timer=null,sway=0,pop=null;
 const b={x:0,y:0,vx:0,vy:0,rot:0,active:false,scored:false,hit:false,landed:false,landT:0,frames:0};
 let drag=null;
 
@@ -48,7 +52,7 @@ const sb=document.getElementById('spots');
 for(const k in SPOTS){const e=document.createElement('button');e.textContent=SPOTS[k].name;e.dataset.k=k;e.onclick=()=>setSpot(k);sb.appendChild(e)}
 function setSpot(k){spot=k;document.getElementById('sp').textContent=SPOTS[k].name;[...sb.children].forEach(e=>e.classList.toggle('on',e.dataset.k===k));if(!b.active)resetBall()}
 function resetBall(){b.x=SPOTS[spot].x;b.y=335;b.vx=b.vy=0;b.active=false;b.scored=false;b.hit=false;b.blocked=false;b.landed=false;b.frames=0}
-function startGame(){document.getElementById('start').style.display='none';document.getElementById('over').style.display='none';score=0;timeLeft=45;document.getElementById('sc').textContent=0;document.getElementById('tm').textContent=45;playing=true;resetBall();clearInterval(timer);timer=setInterval(()=>{timeLeft--;document.getElementById('tm').textContent=timeLeft;if(timeLeft<=0){clearInterval(timer);playing=false;b.active=false;document.getElementById('fs').textContent=score;document.getElementById('over').style.display='flex'}},1000)}
+function startGame(){document.getElementById('start').style.display='none';document.getElementById('over').style.display='none';score=0;timeLeft=120;document.getElementById('sc').textContent=0;document.getElementById('tm').textContent=fmt(120);playing=true;resetBall();clearInterval(timer);timer=setInterval(()=>{timeLeft--;document.getElementById('tm').textContent=fmt(timeLeft);if(timeLeft<=0){clearInterval(timer);playing=false;b.active=false;document.getElementById('fs').textContent=score;document.getElementById('over').style.display='flex'}},1000)}
 
 // input
 function pos(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
@@ -62,18 +66,18 @@ function power(){let x=(drag.sx-drag.cx)*0.13,y=(drag.sy-drag.cy)*0.13;const m=M
 function hitPoint(cx,cy,r,e){const dx=b.x-cx,dy=b.y-cy,d=Math.hypot(dx,dy),m=R+r;if(d<m&&d>0){const nx=dx/d,ny=dy/d;b.x=cx+nx*m;b.y=cy+ny*m;const vn=b.vx*nx+b.vy*ny;if(vn<0){b.vx-=(1+e)*vn*nx;b.vy-=(1+e)*vn*ny;b.vx*=.985;b.vy*=.985;if(Math.abs(vn)>1)b.hit=true}}}
 function hitRect(x,w,t,bt,k){const cx=Math.max(x,Math.min(b.x,x+w)),cy=Math.max(t,Math.min(b.y,bt));let dx=b.x-cx,dy=b.y-cy,d=Math.hypot(dx,dy);if(d<R){if(d===0){dx=-1;dy=0;d=1}const nx=dx/d,ny=dy/d;b.x=cx+nx*R;b.y=cy+ny*R;const vn=b.vx*nx+b.vy*ny;if(vn<0){b.vx-=k*vn*nx;b.vy-=k*vn*ny;b.vy*=.97;return true}}return false}
 function hitBoard(){if(hitRect(BB.x,BB.w,BB.t,BB.b,1.6))b.hit=true}
-const NAMES=['Bryan','Philip','Vincent','Joe'],CHEER=['Ayos!','Swish!','Galing!','Sheesh!'],AWW=['Aww!','Sayang!','Next na!','Kaya mo yan!'];
+const COLS=['#e63946','#2a9d8f','#ffd23f','#8e7dff','#3b82f6','#ff7ac6','#9ad14b','#06b6d4'],fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0'),NAMES=['Bryan','Philip','Vincent','Joe','Kyle','Rafael','Gab','Ken'],CHEER=['Ayos!','Swish!','Galing!','Sheesh!'],AWW=['Aww!','Sayang!','Next na!','Kaya mo yan!'];
 let cheer=0,say=null;
-function react(m){say={i:Math.floor(Math.random()*4),t:m[Math.floor(Math.random()*m.length)],life:70}}
+function react(m){const v=NAMES.map((_,i)=>i).filter(i=>i!==pi&&i!==di);say={i:v[Math.floor(Math.random()*v.length)],t:m[Math.floor(Math.random()*m.length)],life:70}}
 function endShot(){if(!b.scored)react(b.blocked?['Tinapon!','Depensa!']:AWW);resetBall()}
 function defPos(){const s=SPOTS[spot],t=performance.now();return{x:s.x+48+Math.sin(t/500)*8,j:Math.max(0,Math.sin(t/700))*14}}
 function hitDef(){const d=defPos();if(hitRect(d.x-8,16,300-d.j,420-d.j,1.8)){b.hit=true;if(!b.blocked){b.blocked=true;pop={t:'BLOCK!',life:50,c:'255,80,80'}}}}
 function drawCrowd(){
   ctx.fillStyle='#2b2b3a';ctx.fillRect(0,300,W,60);ctx.fillStyle='#3a3a4d';ctx.fillRect(0,300,W,6);
-  const cols=['#e63946','#2a9d8f','#f4a261','#8e7dff'],t=performance.now();
+  const cols=COLS,t=performance.now();
   ctx.textAlign='center';
-  for(let i=0;i<4;i++){
-    const x=60+i*100,y=358+(cheer>.05?-Math.abs(Math.sin(t/110+i))*10*cheer:0);
+  for(let i=0;i<NAMES.length;i++){if(i===pi||i===di)continue;
+    const x=32+i*55,y=358+(cheer>.05?-Math.abs(Math.sin(t/110+i))*10*cheer:0);
     ctx.fillStyle=cols[i];ctx.fillRect(x-20,y-26,40,26);
     ctx.fillStyle='#f1c27d';ctx.beginPath();ctx.arc(x,y-34,9,0,7);ctx.fill();
     if(cheer>.05){ctx.strokeStyle=cols[i];ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(x-18,y-22);ctx.lineTo(x-24,y-48);ctx.moveTo(x+18,y-22);ctx.lineTo(x+24,y-48);ctx.stroke()}
@@ -84,14 +88,14 @@ function drawCrowd(){
 function drawDef(){
   const d=defPos(),x=d.x,f=420-d.j;
   ctx.fillStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.ellipse(x,420,14,5,0,0,7);ctx.fill();
-  ctx.strokeStyle='#e63946';ctx.fillStyle='#e63946';ctx.lineWidth=5;ctx.lineCap='round';
+  ctx.strokeStyle=COLS[di];ctx.fillStyle=COLS[di];ctx.lineWidth=5;ctx.lineCap='round';
   ctx.beginPath();ctx.moveTo(x,f-80);ctx.lineTo(x,f-40);ctx.moveTo(x,f-40);ctx.lineTo(x-7,f);ctx.moveTo(x,f-40);ctx.lineTo(x+7,f);
   ctx.moveTo(x,f-76);ctx.lineTo(x-7,f-118);ctx.moveTo(x,f-76);ctx.lineTo(x+7,f-118);ctx.stroke();
   ctx.fillStyle='#f1c27d';ctx.beginPath();ctx.arc(x,f-91,9,0,7);ctx.fill();
-  ctx.lineCap='butt';ctx.fillStyle='#fff';ctx.font='bold 10px Segoe UI,Arial';ctx.textAlign='center';ctx.fillText('DEF',x,f-124);
+  ctx.lineCap='butt';ctx.fillStyle='#fff';ctx.font='bold 10px Segoe UI,Arial';ctx.textAlign='center';ctx.fillText(NAMES[di],x,f-124);
 }
 function drawSay(){
-  if(!say)return;const x=60+say.i*100,m=NAMES[say.i]+': '+say.t;
+  if(!say)return;const x=32+say.i*55,m=NAMES[say.i]+': '+say.t;
   ctx.font='bold 12px Segoe UI,Arial';ctx.textAlign='center';const w=ctx.measureText(m).width+14,cx=Math.max(w/2+2,Math.min(W-w/2-2,x));
   ctx.fillStyle='rgba(255,255,255,'+Math.min(1,say.life/15)+')';ctx.fillRect(cx-w/2,268,w,20);
   ctx.fillStyle='#111';ctx.fillText(m,cx,283);if(--say.life<=0)say=null;
@@ -159,10 +163,10 @@ function drawNet(){
 }
 function drawPlayer(){
   const s=SPOTS[spot],px=s.x-16;
-  ctx.strokeStyle='#fff';ctx.fillStyle='#fff';ctx.lineWidth=4;ctx.lineCap='round';
+  ctx.strokeStyle=COLS[pi];ctx.fillStyle=COLS[pi];ctx.lineWidth=4;ctx.lineCap='round';
   ctx.beginPath();ctx.moveTo(px,364);ctx.lineTo(px,396);ctx.moveTo(px,396);ctx.lineTo(px-6,420);ctx.moveTo(px,396);ctx.lineTo(px+6,420);
   ctx.moveTo(px,372);ctx.lineTo(px+12,350);ctx.stroke();
-  ctx.beginPath();ctx.arc(px,354,8,0,7);ctx.fill();
+  ctx.fillStyle='#f1c27d';ctx.beginPath();ctx.arc(px,354,8,0,7);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 11px Segoe UI,Arial';ctx.textAlign='center';ctx.fillText(NAMES[pi],px,438);
   ctx.lineCap='butt';
 }
 function drawBall(){
@@ -186,8 +190,12 @@ function draw(){
   if(pop){ctx.fillStyle='rgba('+(pop.c||'0,255,100')+','+Math.min(1,pop.life/20)+')';ctx.font='bold 26px Segoe UI,Arial';ctx.textAlign='center';ctx.fillText(pop.t,330,140-(50-pop.life)*.6);if(--pop.life<=0)pop=null}
 }
 function loop(){update();draw();requestAnimationFrame(loop)}
+const ps=document.getElementById('ps'),ds=document.getElementById('ds');
+NAMES.forEach((n,i)=>{ps.add(new Option(n,i));ds.add(new Option(n,i))});
+ps.value=pi;ds.value=di;
+ps.onchange=()=>{pi=+ps.value;if(di===pi){di=(pi+1)%NAMES.length;ds.value=di}};
+ds.onchange=()=>{di=+ds.value;if(pi===di){pi=(di+1)%NAMES.length;ps.value=pi}};
 setSpot('wing');loop();
 </script>
 </body>
-  </html>
-  
+</html>
