@@ -23,7 +23,7 @@
             overflow: hidden;
         }
         h1 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin-bottom: 5px;
             color: #ff6600;
             text-transform: uppercase;
@@ -35,7 +35,7 @@
             width: 100%;
             max-width: 450px;
             height: 480px;
-            background: linear-gradient(to bottom, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             border: 3px solid #fff;
             border-radius: 12px;
             overflow: hidden;
@@ -59,70 +59,72 @@
         .hud-item span {
             color: #ffcc00;
         }
-        /* Court Graphics */
+        /* Side-View Court Graphics */
         .court-floor {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 150px;
+            height: 120px;
             background: #d35400;
-            border-top: 3px solid #fff;
+            border-top: 4px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .three-point-arc {
-            position: absolute;
-            top: -120px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 380px;
-            height: 220px;
-            border: 3px dashed rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
+        /* VCA Logo sa Sahig */
+        #vca-logo {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            user-select: none;
         }
-        /* Hoop & Backboard */
+        
+        /* Side Hoop & Backboard (Mas pinaliit) */
         #backboard {
             position: absolute;
-            top: 55px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            height: 60px;
+            top: 145px;
+            right: 40px;
+            width: 12px;
+            height: 70px;
             background: rgba(255, 255, 255, 0.9);
             border: 2px solid #333;
-            border-radius: 4px;
+            border-radius: 2px;
         }
         #rim {
             position: absolute;
-            top: 105px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 48px;
-            height: 12px;
-            border: 3px solid #ff3300;
-            border-radius: 50%;
+            top: 195px;
+            right: 52px;
+            width: 32px;
+            height: 10px;
+            border: 2.5px solid #ff3300;
+            border-radius: 3px;
             z-index: 5;
         }
         #net {
             position: absolute;
-            top: 114px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 35px;
-            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.7), rgba(255,255,255,0.7) 4px, transparent 4px, transparent 8px);
-            clip-path: polygon(10% 0%, 90% 0%, 75% 100%, 25% 100%);
+            top: 204px;
+            right: 54px;
+            width: 28px;
+            height: 30px;
+            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.7), rgba(255,255,255,0.7) 3px, transparent 3px, transparent 6px);
+            clip-path: polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%);
             z-index: 4;
         }
-        /* Basketball */
+
+        /* Basketball (Mas maliit na rin) */
         #ball {
             position: absolute;
-            width: 28px;
-            height: 28px;
+            width: 20px;
+            height: 20px;
             background: radial-gradient(circle at 30% 30%, #ff7700, #b33600);
             border-radius: 50%;
-            box-shadow: inset -3px -3px 6px rgba(0,0,0,0.5), 0 3px 6px rgba(0,0,0,0.4);
+            box-shadow: inset -2px -2px 4px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.4);
             display: none;
             z-index: 6;
         }
+
         /* Controls Panel */
         #controls-panel {
             margin-top: 10px;
@@ -182,23 +184,23 @@
 </head>
 <body>
 
-    <h1>3-Point Shootout</h1>
+    <h1>VCA 3-Point Shootout</h1>
 
     <div id="game-container">
         <!-- HUD / Score & Timer -->
         <div id="hud">
             <div class="hud-item">Score: <span id="score">0</span></div>
-            <div class="hud-item">Spot: <span id="current-spot">Top</span></div>
+            <div class="hud-item">Range: <span id="current-spot">Wing 3PT</span></div>
             <div class="hud-item">Time: <span id="timer">45</span>s</div>
         </div>
 
-        <!-- Court Elements -->
+        <!-- Side Court Elements -->
         <div id="backboard"></div>
         <div id="rim"></div>
         <div id="net"></div>
 
         <div class="court-floor">
-            <div class="three-point-arc"></div>
+            <div id="vca-logo">VÇA</div>
         </div>
 
         <!-- The Ball -->
@@ -206,8 +208,8 @@
 
         <!-- Start / Game Over Screens -->
         <div id="start-screen" class="overlay">
-            <h2>3-Point Contest</h2>
-            <p>I-swipe o i-drag ang daliri pataas o paitaas sa screen para i-adjust ang lakas at anggulo ng tira bago maubos ang 45 segundo!</p>
+            <h2>VCA Shootout</h2>
+            <p>Mas swak na ang laki ng bola at ring ngayon! I-drag lang ang bola pabalik at i-release papuntang kanan para i-shoot.</p>
             <button onclick="startGame()">Simulan ang Laro</button>
         </div>
 
@@ -222,15 +224,13 @@
     <div id="controls-panel">
         <div class="control-row">
             <select id="spot-select" onchange="changeSpot()">
-                <option value="left-corner">Left Corner</option>
-                <option value="left-wing">Left Wing</option>
-                <option value="top" selected>Top of the Key</option>
-                <option value="right-wing">Right Wing</option>
-                <option value="right-corner">Right Corner</option>
+                <option value="short">Short Corner</option>
+                <option value="wing" selected>Wing 3-Pointer</option>
+                <option value="deep">Deep Logo 3</option>
             </select>
         </div>
     </div>
-    <div id="instructions">💡 I-drag at i-release ang bola para tumira sa ring!</div>
+    <div id="instructions">💡 I-drag at bitawan ang bola papunta sa ring!</div>
 
     <script>
         const container = document.getElementById('game-container');
@@ -249,20 +249,17 @@
         let isPlaying = false;
         let isShotActive = false;
 
-        // Relative coordinates para sa 450x480 container size
         const spots = {
-            'left-corner': { x: 60, y: 400, name: 'Left Corner' },
-            'left-wing': { x: 120, y: 360, name: 'Left Wing' },
-            'top': { x: 225, y: 340, name: 'Top' },
-            'right-wing': { x: 330, y: 360, name: 'Right Wing' },
-            'right-corner': { x: 390, y: 400, name: 'Right Corner' }
+            'short': { x: 280, y: 390, name: 'Short Corner' },
+            'wing': { x: 180, y: 390, name: 'Wing 3PT' },
+            'deep': { x: 80, y: 390, name: 'Deep Logo 3' }
         };
 
-        let currentSpotKey = 'top';
-        let ballPos = { x: spots['top'].x, y: spots['top'].y };
+        let currentSpotKey = 'wing';
+        let ballPos = { x: spots['wing'].x, y: spots['wing'].y };
 
         let velocity = { x: 0, y: 0 };
-        let gravity = 0.35;
+        let gravity = 0.38;
 
         let isDragging = false;
         let dragStart = { x: 0, y: 0 };
@@ -309,13 +306,11 @@
             ballPos.x = spot.x;
             ballPos.y = spot.y;
             ball.style.display = 'block';
-            ball.style.left = (ballPos.x - 14) + 'px';
-            ball.style.top = (ballPos.y - 14) + 'px';
-            ball.style.transform = 'scale(1)';
+            ball.style.left = (ballPos.x - 10) + 'px';
+            ball.style.top = (ballPos.y - 10) + 'px';
             isShotActive = false;
         }
 
-        // Unified Handle Start (Mouse & Touch)
         function handleDragStart(clientX, clientY) {
             if (!isPlaying || isShotActive) return;
             isDragging = true;
@@ -324,7 +319,6 @@
             dragStart.y = clientY - rect.top;
         }
 
-        // Unified Handle End (Mouse & Touch)
         function handleDragEnd(clientX, clientY) {
             if (!isDragging || !isPlaying || isShotActive) return;
             isDragging = false;
@@ -332,17 +326,15 @@
             const dragEndX = clientX - rect.left;
             const dragEndY = clientY - rect.top;
 
-            const powerX = (dragStart.x - dragEndX) * 0.12;
-            const powerY = (dragStart.y - dragEndY) * 0.12;
+            const powerX = (dragStart.x - dragEndX) * 0.13;
+            const powerY = (dragStart.y - dragEndY) * 0.13;
 
             shootBall(powerX, powerY);
         }
 
-        // Mouse Events
         container.addEventListener('mousedown', (e) => handleDragStart(e.clientX, e.clientY));
         window.addEventListener('mouseup', (e) => handleDragEnd(e.clientX, e.clientY));
 
-        // Touch Events for Mobile
         container.addEventListener('touchstart', (e) => {
             if (e.touches.length > 0) {
                 handleDragStart(e.touches[0].clientX, e.touches[0].clientY);
@@ -369,15 +361,12 @@
                 ballPos.y += velocity.y;
                 velocity.y += gravity;
 
-                ball.style.left = (ballPos.x - 14) + 'px';
-                ball.style.top = (ballPos.y - 14) + 'px';
-                
-                let depthScale = Math.max(0.4, 1 - (380 - ballPos.y) / 400);
-                ball.style.transform = `scale(${depthScale})`;
+                ball.style.left = (ballPos.x - 10) + 'px';
+                ball.style.top = (ballPos.y - 10) + 'px';
 
-                // Rim Check (X: 200 to 250, Y: 100 to 112)
-                if (!hasCheckedScore && ballPos.y >= 100 && ballPos.y <= 112) {
-                    if (ballPos.x >= 210 && ballPos.x <= 240 && velocity.y > 0) {
+                // Adjusted Rim Hitbox para sa mas maliit na ring
+                if (!hasCheckedScore && ballPos.y >= 190 && ballPos.y <= 202) {
+                    if (ballPos.x >= 375 && ballPos.x <= 405 && velocity.y > 0) {
                         hasCheckedScore = true;
                         score += 3;
                         scoreDisplay.textContent = score;
@@ -400,4 +389,5 @@
         resetBall();
     </script>
 </body>
-</html>
+    </html>
+    
