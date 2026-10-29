@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>3-Point Basketball Shootout Game</title>
+    <title>VCA 3-Point Shootout Game</title>
     <style>
         * {
             box-sizing: border-box;
@@ -81,14 +81,14 @@
             user-select: none;
         }
         
-        /* Side Hoop & Backboard */
+        /* Eksaktong Alignment ng Backboard at Rim */
         #backboard {
             position: absolute;
             top: 130px;
-            right: 40px;
+            right: 30px;
             width: 12px;
-            height: 70px;
-            background: rgba(255, 255, 255, 0.9);
+            height: 75px;
+            background: rgba(255, 255, 255, 0.95);
             border: 2px solid #333;
             border-radius: 2px;
             z-index: 4;
@@ -96,22 +96,22 @@
         #rim {
             position: absolute;
             top: 185px;
-            right: 50px;
-            width: 35px;
+            right: 42px;
+            width: 36px;
             height: 12px;
             border: 3px solid #ff3300;
-            border-radius: 3px;
+            border-radius: 4px;
             z-index: 6;
         }
         #net {
             position: absolute;
-            top: 195px;
-            right: 52px;
-            width: 30px;
-            height: 35px;
-            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.7), rgba(255,255,255,0.7) 3px, transparent 3px, transparent 6px);
+            top: 196px;
+            right: 44px;
+            width: 32px;
+            height: 38px;
+            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.8), rgba(255,255,255,0.8) 3px, transparent 3px, transparent 6px);
             clip-path: polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%);
-            z-index: 5;
+            z-index: 3;
         }
 
         /* Basketball */
@@ -210,7 +210,7 @@
         <!-- Start / Game Over Screens -->
         <div id="start-screen" class="overlay">
             <h2>VCA Shootout</h2>
-            <p>Inayos ko na ang tamang sakto ng ring at bola! I-drag pabalik at i-release para makapuntos.</p>
+            <p>Perfect na ang ring alignment at collision! Subukan nang mag-shoot sa pamamagitan ng pag-drag at pag-release.</p>
             <button onclick="startGame()">Simulan ang Laro</button>
         </div>
 
@@ -231,7 +231,7 @@
             </select>
         </div>
     </div>
-    <div id="instructions">💡 I-drag at bitawan ang bola papunta sa ring!</div>
+    <div id="instructions">💡 I-drag at bitawan ang bola para pumasok sa ring!</div>
 
     <script>
         const container = document.getElementById('game-container');
@@ -250,7 +250,6 @@
         let isPlaying = false;
         let isShotActive = false;
 
-        // Mga pwesto ng pagtira
         const spots = {
             'short': { x: 220, y: 390, name: 'Short Corner' },
             'wing': { x: 120, y: 390, name: 'Wing 3PT' },
@@ -355,6 +354,7 @@
             velocity.y = vy;
 
             let hasCheckedScore = false;
+            let hasHitRim = false;
 
             function updatePhysics() {
                 if (!isPlaying) return;
@@ -366,9 +366,24 @@
                 ball.style.left = (ballPos.x - 12) + 'px';
                 ball.style.top = (ballPos.y - 12) + 'px';
 
-                // Sakto at eksaktong boundary ng rim (Rim Y: 185, X: 365 hanggang 400)
-                if (!hasCheckedScore && ballPos.y >= 180 && ballPos.y <= 192) {
-                    if (ballPos.x >= 365 && ballPos.x <= 405 && velocity.y > 0) {
+                // Rim Coordinates Mapping (Tamang-tama sa mismong pwesto ng orange rim sa screen)
+                const rimLeft = 415;
+                const rimRight = 450;
+                const rimTop = 185;
+
+                // Physics check para sa pagtama sa rim (Bounce effect)
+                if (!hasHitRim && velocity.y > 0 && ballPos.y >= rimTop - 5 && ballPos.y <= rimTop + 5) {
+                    if (ballPos.x >= rimLeft - 10 && ballPos.x <= rimLeft + 5) {
+                        // Tumaas nang kaunti o nag-bounce mula sa unahan ng ring
+                        velocity.y = -velocity.y * 0.35;
+                        velocity.x = -velocity.x * 0.5;
+                        hasHitRim = true;
+                    }
+                }
+
+                // Check kung pumasok sa mismong butas ng ring (Swish / Score)
+                if (!hasCheckedScore && ballPos.y >= rimTop + 2 && ballPos.y <= rimTop + 16) {
+                    if (ballPos.x >= rimLeft + 4 && ballPos.x <= rimRight - 5 && velocity.y > 0) {
                         hasCheckedScore = true;
                         score += 3;
                         scoreDisplay.textContent = score;
@@ -377,9 +392,9 @@
                     }
                 }
 
-                // Kapag lumagpas na sa screen o bumagsak
+                // I-reset ang bola kapag lumagpas na sa screen boundaries
                 if (ballPos.y > 500 || ballPos.x < 0 || ballPos.x > 450) {
-                    setTimeout(resetBall, 300);
+                    setTimeout(resetBall, 250);
                     return;
                 }
 
