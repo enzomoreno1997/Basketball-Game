@@ -65,6 +65,31 @@ body.shoot #joy{display:block}
 .rw{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0}
 .rw button{padding:8px 10px;font-size:.78rem;flex:none}.rw button.sel{background:#f60}.rw button:disabled{opacity:.4}
 #profin select{width:100%;padding:8px;border-radius:6px;background:#333;color:#fff;border:1px solid #777}
+h1,#start{display:none!important}
+#pick,#opts label,.arr{display:none!important}
+#opts{justify-content:flex-end!important}
+#pad{display:none;justify-content:space-between;align-items:center;width:100%;margin-top:8px;padding:0 6px;max-width:min(450px,max(260px,calc((100dvh - 250px)*.9375)))}
+body.shoot #pad{display:flex}
+#joy{position:relative!important;right:auto!important;bottom:auto!important;width:96px!important;height:96px!important;display:block!important}
+#mhint{font-size:.7rem;color:#aaa;text-align:center;line-height:1.5}
+#shootbtn{flex:none!important;width:92px;height:92px;border-radius:50%!important;background:radial-gradient(circle at 35% 30%,#ff9a3d,#e04a00)!important;border:3px solid #fff!important;font-weight:900;font-size:.95rem;letter-spacing:1px;touch-action:none}
+#shootbtn:active{filter:brightness(1.3)}
+#prof{background:radial-gradient(circle at 15% 0%,#3a1a6e 0,#14142a 45%,#0a0a14 100%)!important}
+.hlogo{font-weight:900;font-style:italic;font-size:2rem;letter-spacing:2px;color:#fff;text-shadow:0 0 18px #ff6600;line-height:1}
+.hlogo span{color:#ff6600}.hlogo small{display:block;font-size:.62rem;letter-spacing:3px;font-style:normal;font-weight:400;color:#ff9a3d;text-shadow:none;margin-top:4px}
+.hmain{display:flex;gap:12px;align-items:center;margin:12px 0}
+.hmain canvas{border-radius:12px;flex:none;max-width:48%;height:auto}
+.pcard{flex:1;background:rgba(255,255,255,.06);border-radius:10px;padding:10px;line-height:1.35;font-size:.9rem}
+.tile{display:flex!important;align-items:center;gap:12px;width:100%;text-align:left;padding:11px 14px!important;margin:6px 0;background:linear-gradient(90deg,rgba(255,102,0,.3),rgba(30,30,60,.92))!important;border-left:6px solid #ff6600!important;border-radius:4px 14px 4px 14px!important;font-style:italic;text-transform:uppercase;flex:none!important}
+.tile span{font-size:1.6rem}.tile b{font-size:.98rem;display:block}.tile small{display:block;font-size:.66rem;opacity:.75;font-weight:400;text-transform:none;font-style:normal}
+.tile:active{filter:brightness(1.3)}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:8px 0}
+.chip{font-size:.7rem!important;padding:9px 2px!important;border:2px solid transparent!important;white-space:nowrap;overflow:hidden;flex:none!important}
+.chip.sel{border-color:#fff!important;box-shadow:0 0 0 2px #f60}.chip:disabled{opacity:.3}
+.lb{font-size:.8rem;color:#ccc;margin-top:6px}.setrow{margin:12px 0;font-size:.88rem;color:#ddd}
+#jprev{width:140px!important;aspect-ratio:150/180!important;flex:none}
+#hprev{width:46%!important;aspect-ratio:190/230!important}
+.sw{min-height:0!important;height:36px!important;width:36px!important}
 </style>
 </head>
 <body class="shoot">
@@ -72,23 +97,23 @@ body.shoot #joy{display:block}
 <div id="hud"><div>Score: <span id="sc">0</span><small id="gl">/50🏍️</small></div><div><span id="spl">Spot</span>: <span id="sp">Wing 3PT</span></div><div><span id="tl">Oras</span>: <span id="tm">2:00</span></div></div>
 <div id="wrap">
 <canvas id="c" width="450" height="480"></canvas>
-<div id="joy"><div id="knob"></div></div>
 <div id="start" class="ov"><h2>VCA Shootout</h2><p><b>🏀 3-Point:</b> maka-50 puntos sa loob ng 2 minuto.<br><b>🔥 Dunk Contest:</b> 5 dunks, timing ang labanan, huhusgahan ng tropa. Abutin ang 40 para sa <b style="color:#ff4d4d">Honda ADV 160</b>!</p><button onclick="startGame('shoot')">🏀 3-Point Shootout</button><button onclick="startGame('dunk')" style="background:#c026d3">🔥 Dunk Contest</button><button onclick="openProf()" style="background:#7c3aed">👕 Jersey &amp; 🏆 Profile</button></div>
 <div id="win" class="ov" style="display:none;inset:0 0 auto 0;height:68%;border-radius:12px 12px 0 0;background:rgba(10,10,30,.9);padding:8px;gap:5px"><h2 style="font-size:1.2rem">🏆 MOTOR FLEX!</h2><svg viewBox="0 0 250 120" width="95"><circle cx="55" cy="90" r="24" fill="#222"/><circle cx="55" cy="90" r="11" fill="#999"/><circle cx="200" cy="90" r="24" fill="#222"/><circle cx="200" cy="90" r="11" fill="#999"/><path d="M55 90 L90 60 L150 60 L175 40 L192 44 L200 90 L185 90 L172 58 L150 78 L105 78 Z" fill="#d7141a"/><rect x="85" y="50" width="62" height="12" rx="6" fill="#111"/><path d="M168 40 L178 14 L194 18 L186 44 Z" fill="#222"/><rect x="172" y="8" width="24" height="7" rx="3" fill="#333"/><circle cx="196" cy="34" r="6" fill="#ffe066"/><path d="M95 78 L130 78 L140 88 L100 90 Z" fill="#555"/><text x="100" y="72" fill="#fff" font-size="10" font-weight="bold">ADV160</text></svg><p style="font-size:.78rem;margin:0">PANALO KA! <b style="color:#ff4d4d">HONDA ADV 160</b> ang napanalunan mo!<span id="wl2"></span></p><div id="jr" style="display:flex;flex-wrap:wrap;gap:3px;justify-content:center"></div><div class="brow"><button onclick="startGame()">Maglaro Uli</button><button onclick="openProf()" style="background:#7c3aed">🏆 Profile</button><button onclick="showMenu()" style="background:#444">Menu</button></div></div>
 <div id="over" class="ov" style="display:none"><h2>Tapos na!</h2><p>Final Score: <b id="fs" style="color:#fc0">0</b><br><span id="need"></span></p><div class="brow"><button onclick="startGame()">Maglaro Uli</button><button onclick="openProf()" style="background:#7c3aed">🏆 Profile</button><button onclick="showMenu()" style="background:#444">Menu</button></div></div>
 </div>
+<div id="pad"><div id="joy"><div id="knob"></div></div><div id="mhint">🕹 Galaw<br>🎯 Bitawan sa GREEN</div><button id="shootbtn">SHOOT</button></div>
 <div id="pick"><label>Player<select id="ps"></select></label><label>Defender<select id="ds"></select></label></div>
-<div id="opts"><label><input type="checkbox" id="as"> Auto-palit ng player/defender</label><span style="display:flex;gap:6px"><button id="pf2" onclick="openProf();this.blur()">👕</button><button id="pb" onclick="togglePause();this.blur()">⏸</button><button id="mt" onclick="toggleMute();this.blur()">🔊</button></span></div>
+<div id="opts"><label><input type="checkbox" id="as"> Auto-palit ng player/defender</label><span style="display:flex;gap:6px"><button id="pf2" onclick="showMenu();this.blur()">☰ Menu</button><button id="pb" onclick="togglePause();this.blur()">⏸</button><button id="mt" onclick="toggleMute();this.blur()">🔊</button></span></div>
 <div id="spots"></div>
 <div id="dunkui"></div>
 <div id="tip2" style="font-size:.72rem;color:#999;text-align:center;margin-top:6px;max-width:450px">⌨️ Space (hold) = power, bitawan = shoot · ↑↓ anggulo · ←→ pwesto · Q/E player · Z/C defender · P pause · M mute<br>🎮 A = shoot · stick/D-pad = aim · LB/RB player · LT/RT defender · Start = pause</div>
-<div id="tip">💡 I-drag palayo sa ring, may guide na tuldok. Iwasan ang defender, bantayan ang hangin, at kunin ang Fire/Time ball!</div>
+<div id="tip">💡 Joystick = galaw · hawakan ang SHOOT at bitawan sa GREEN zone · o i-drag ang bola. Bantayan ang hangin at defender!</div>
 <div id="prof"><div id="profin"></div></div>
 <script>
 const cv=document.getElementById('c');let ctx=cv.getContext('2d');const CX=ctx;const DPR=Math.min(2,window.devicePixelRatio||1);cv.width=450*DPR;cv.height=480*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);cv.addEventListener('contextmenu',e=>e.preventDefault());
 const W=450,H=480,R=12,G=0.3,GY=410;
 const RIM={fx:362,bx:410,y:190},BB={x:410,w:8,t:105,b:200};
-const SPOTS={short:{x:285,pts:2,name:'Mid 2PT'},wing:{x:140,pts:3,name:'Wing 3PT'},deep:{x:50,pts:4,name:'Logo 4PT'}};
+const SPOTS={short:{x:262,pts:2,name:'Mid 2PT'},wing:{x:140,pts:3,name:'Wing 3PT'},deep:{x:50,pts:4,name:'Logo 4PT'}};
 let paused=false,tick=null,px0=140,py0=420,mode='shoot',spot='wing',pi=0,di=1,score=0,timeLeft=120,playing=false,timer=null,sway=0,pop=null,wind=0,streak=0,finishing=false,won=false,mute=false,AC=null,lastC=0,gf={m:0,t:0};
 const b={x:0,y:0,vx:0,vy:0,rot:0,active:false,scored:false,hit:false,landed:false,landT:0,frames:0};
 let drag=null;
@@ -102,25 +127,25 @@ sb.prepend(arrowBtn('\u25c0','l'));sb.append(arrowBtn('\u25b6','r'));
 function zoneOf(x){return x>=176?'short':x>=95?'wing':'deep'}
 function syncSpot(){spot=zoneOf(px0);if(mode!=='dunk')document.getElementById('sp').textContent=SPOTS[spot].name;[...sb.children].forEach(e=>e.classList.toggle('on',e.dataset.k===spot))}
 function setSpot(k){px0=SPOTS[k].x;syncSpot();if(!b.active)resetBall()}
-function moveX(d){px0=Math.max(44,Math.min(290,px0+d));if(zoneOf(px0)!==spot)syncSpot();if(!b.active)b.x=px0}
+function moveX(d){px0=Math.max(44,Math.min(270,px0+d));if(zoneOf(px0)!==spot)syncSpot();if(!b.active)b.x=px0}
 function moveY(d){py0=Math.max(392,Math.min(450,py0+d));if(!b.active)b.y=ballY()}
 function scF(y){return .95+(y-392)/58*.2}
 function ballY(){return py0-78*scF(py0)}
-function resetBall(){b.x=px0;b.y=ballY();b.vx=b.vy=0;b.active=false;b.scored=false;b.hit=false;b.blocked=false;b.dj=false;b.landed=false;b.frames=0;trail.length=0}
+function resetBall(){b.x=px0;b.y=ballY();b.vx=b.vy=0;b.active=false;b.scored=false;b.hit=false;b.blocked=false;b.dj=false;b.green=false;b.landed=false;b.frames=0;trail.length=0}
 function goal(){return mode==='dunk'?40:WIN}
-function showMenu(){['over','win'].forEach(i=>document.getElementById(i).style.display='none');document.getElementById('start').style.display='flex';playing=false;paused=false}
+function showMenu(){['over','win'].forEach(i=>document.getElementById(i).style.display='none');playing=false;paused=false;b.active=false;clearInterval(timer);openHub('home')}
 function startGame(m){
   if(m)mode=m;document.body.className=mode;
   document.getElementById('spl').textContent=mode==='dunk'?'Trick':'Spot';document.getElementById('tl').textContent='Oras';document.getElementById('gl').textContent='/'+goal()+'🏍️';
-  document.getElementById('tip').textContent=mode==='dunk'?'💡 RUN → JUMP sa green zone → FLAIR sa tuktok. Mas mahirap ang trick, mas mataas ang puntos. Abutin ang 40!':'💡 I-drag palayo sa ring, may guide na tuldok. Iwasan ang defender, bantayan ang hangin, at kunin ang Fire/Time ball!';
+  document.getElementById('tip').textContent=mode==='dunk'?'💡 RUN → JUMP sa green zone → FLAIR sa tuktok. Mas mahirap ang trick, mas mataas ang puntos. Abutin ang 40!':'💡 Joystick = galaw · hawakan ang SHOOT at bitawan sa GREEN zone · o i-drag ang bola. Bantayan ang hangin at defender!';
   defS.x=px0+62;defS.y=py0;rs={clutch:false,hot:0,logo:0,perfect:false};conf.length=0;
   startGameBase();if(mode==='dunk')dunkInit();else syncSpot();
 }
-function startGameBase(){document.getElementById('start').style.display='none';document.getElementById('over').style.display='none';document.getElementById('win').style.display='none';score=0;timeLeft=120;document.getElementById('sc').textContent=0;document.getElementById('tm').textContent=fmt(120);document.getElementById('tm').style.color='';paused=false;kb.sp=false;kb.charging=false;playing=true;finishing=false;won=false;gf.m=0;gf.t=0;streak=0;pop=null;say=null;ac();resetBall();b.type='normal';wind=0;dj=-1;clearInterval(timer);timer=setInterval(tick=()=>{timeLeft--;document.getElementById('tm').textContent=fmt(timeLeft);document.getElementById('tm').style.color=timeLeft<=5?'#ff4040':'';if(timeLeft<=0){clearInterval(timer);if(b.active)finishing=true;else endGame()}},1000)}
+function startGameBase(){document.getElementById('start').style.display='none';document.getElementById('over').style.display='none';document.getElementById('win').style.display='none';score=0;timeLeft=120;document.getElementById('sc').textContent=0;document.getElementById('tm').textContent=fmt(120);document.getElementById('tm').style.color='';paused=false;kb.sp=false;kb.charging=false;playing=true;finishing=false;won=false;gf.m=0;gf.t=0;streak=0;pop=null;say=null;ac();resetBall();b.type='normal';wind=0;dj=-1;clearInterval(timer);timer=setInterval(tick=()=>{timeLeft--;document.getElementById('tm').textContent=fmt(timeLeft);document.getElementById('tm').style.color=timeLeft<=5?'#ff4040':'';if(timeLeft<=0){sfxBuzz();clearInterval(timer);if(b.active)finishing=true;else endGame()}},1000)}
 
 // input
 function pos(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
-cv.addEventListener('pointerdown',e=>{if(paused){togglePause();return}if(mode==='dunk'){if(playing){e.preventDefault();dunkAction()}return}if(!playing||b.active)return;kb.on=false;cv.setPointerCapture(e.pointerId);const p=pos(e);drag={sx:p.x,sy:p.y,cx:p.x,cy:p.y}});
+cv.addEventListener('pointerdown',e=>{if(paused){togglePause();return}if(mode==='dunk'){if(playing){e.preventDefault();dunkAction()}return}if(!playing||b.active)return;kb.on=false;if(Math.random()<.4)react(PRE,true);cv.setPointerCapture(e.pointerId);const p=pos(e);drag={sx:p.x,sy:p.y,cx:p.x,cy:p.y}});
 cv.addEventListener('pointermove',e=>{if(!drag)return;const p=pos(e);drag.cx=p.x;drag.cy=p.y});
 cv.addEventListener('pointerup',()=>{if(!drag)return;const v=power();drag=null;if(Math.hypot(v.x,v.y)<2)return;b.vx=v.x;b.vy=v.y;b.active=true;b.frames=0});
 cv.addEventListener('pointercancel',()=>drag=null);
@@ -135,8 +160,8 @@ CHEER=['Aba, pumasok! Himala!','Swish! Parang walang bantay ah!','Sino nag-ampon
 AWW=['Sablay! Airball na naman!','Patingin nga ng mata mo!','Huwag pilitin kung ayaw sayo!','Ring ba yan o pader?','Nagpapahinga ka ba o tumitira?','Bola ba yan o bato?','Pang-liga ba yan o pang-eskwela?'],
 BLK=['Tinapon! Wag dito, boss!','Bawal ang mahina dito!','Hanggang diyan ka lang!'];
 let cheer=0,say=null;
-function react(m){
-  gf.m=(m===CHEER)?1:2;gf.t=80;const pk=m[Math.floor(Math.random()*m.length)];
+function react(m,q){
+  if(!q){gf.m=(m===CHEER)?1:2;gf.t=80}const pk=m[Math.floor(Math.random()*m.length)];
   if(Math.random()<.4){say={x:defPos().x,n:NAMES[di],t:pk,life:110}}
   else{const v=[0,1,2,3,4,5,6,7].filter(i=>i!==pi&&i!==di),i=v[Math.floor(Math.random()*v.length)];say={x:28+(i<4?i:i+1)*48,n:NAMES[i],t:pk,life:110}}
 }
@@ -185,7 +210,7 @@ function step(dt){
   if(b.y>GY-R){b.y=GY-R;if(b.vy>1.2){b.vy*=-.6;b.vx*=.8;if(!b.landed){b.landed=true;b.landT=performance.now()}}else{b.vy=0;b.vx*=.95;if(!b.landed){b.landed=true;b.landT=performance.now()}}}
   if(!b.scored&&py<RIM.y&&b.y>=RIM.y&&b.vy>0&&b.x>RIM.fx&&b.x<RIM.bx){
     b.scored=true;const m=mult();streak++;if(timeLeft<=5)rs.clutch=true;if(streak>rs.hot)rs.hot=streak;if(spot==='deep')rs.logo++;let p=SPOTS[spot].pts*m*(timeLeft<=5?2:1)*(b.type==='fire'?2:1),tx='';if(b.type==='time'){timeLeft+=10;tx=' ⏱+10s';document.getElementById('tm').textContent=fmt(timeLeft)}score+=p;document.getElementById('sc').textContent=score;sway=1;cheer=1;react(CHEER);sfxSwish();setTimeout(sfxCheer,150);if(score>=WIN&&!won){won=true;finishing=true}
-    pop={t:(b.hit?'':'SWISH! ')+'+'+p+(m>1?' 🔥x'+m:'')+tx,life:50};
+    pop={t:(b.green?'GREEN! ':(b.hit?'':'SWISH! '))+'+'+p+(m>1?' 🔥x'+m:'')+tx,life:50};
   }
 }
 function update(){
@@ -254,14 +279,14 @@ function drawBall(){drawTrail();
   ctx.restore();
 }
 function drawAim(){
-  if(b.active||!playing||!(drag||kb.on))return;
+  if(b.active||!playing||!(drag||(kb.on&&!set.meter)))return;
   const v=drag?power():kbVel();let x=b.x,y=b.y,vx=v.x,vy=v.y;
   for(let i=0;i<16;i++){for(let k=0;k<6;k++){vy+=G*.25;x+=vx*.25;y+=vy*.25}
     ctx.fillStyle='rgba(255,255,255,'+(0.9-i*.05)+')';ctx.beginPath();ctx.arc(x,y,3,0,7);ctx.fill()}
 }
 function draw(){
-  ctx.clearRect(0,0,W,H);drawCourt();drawHoop();if(mode==='dunk')drawDunk();else{drawPlayer();drawDef()}
-  if(mode==='dunk'?b.active:(playing||!b.active))drawBall();
+  ctx.clearRect(0,0,W,H);drawCourt();drawHoop();if(mode==='dunk')drawDunk();else{drawPlayer();drawDef();drawMeter()}
+  drawBallX();
   drawNet();if(mode==='dunk')drawDunkUI();else{drawAim();drawHUD2();drawKB()}drawSay();
   if(conf.length)drawConf();
   if(pop){ctx.fillStyle='rgba('+(pop.c||'0,255,100')+','+Math.min(1,pop.life/20)+')';ctx.font='bold 22px Segoe UI,Arial';ctx.textAlign='center';ctx.fillText(pop.t,250,140-(60-pop.life)*.5);if(--pop.life<=0)pop=null}
@@ -295,10 +320,16 @@ function inputTick(){
   if(mode==='dunk'){const w=kb.sp||pad.a;if(w&&!kb.w2)dunkAction();kb.w2=w;return}
   {const mv=Math.max(-1,Math.min(1,((kb.keys.ArrowRight||dp.r)?1:0)-((kb.keys.ArrowLeft||dp.l)?1:0)+(pad.dx||0)+jv.x));moving=!!(mv||jv.y);if(canAim()){if(mv)moveX(mv*2.2);if(jv.y)moveY(jv.y*1.3);if(mv&&!dp.l&&!dp.r&&!jv.x)kb.on=true}}
   const want=kb.sp||pad.a;
-  if(want&&!kb.charging&&canAim()){kb.charging=true;kb.pw=0;kb.dir=1;kb.on=true}
+  if(!want)kb.lock=false;
+  if(want&&!kb.charging&&!kb.lock&&canAim()){kb.charging=true;kb.pw=0;kb.dir=1;if(!set.meter)kb.on=true;if(Math.random()<.5)react(PRE,true)}
   if(kb.charging){
-    if(want){kb.pw+=kb.dir*.018;if(kb.pw>=1){kb.pw=1;kb.dir=-1}if(kb.pw<=0){kb.pw=0;kb.dir=1}}
-    else{kb.charging=false;if(canAim())fireKB()}
+    if(set.meter){
+      if(want){kb.pw+=RATE[set.diff];if(kb.pw>=1){kb.pw=1;kb.charging=false;kb.lock=true;if(canAim())meterShot(1)}}
+      else{kb.charging=false;if(canAim())meterShot(kb.pw)}
+    }else{
+      if(want){kb.pw+=kb.dir*.018;if(kb.pw>=1){kb.pw=1;kb.dir=-1}if(kb.pw<=0){kb.pw=0;kb.dir=1}}
+      else{kb.charging=false;if(canAim())fireKB()}
+    }
   }
   if(canAim()){const u=(kb.keys&&kb.keys.ArrowUp?1:0)-(kb.keys&&kb.keys.ArrowDown?1:0)+(pad.dy||0);if(u){kb.ang=clamp(kb.ang+u*.6,30,80);kb.on=true}}
 }
@@ -308,7 +339,7 @@ function pollPad(){
   for(const g of gps){if(g&&g.connected){p=g;break}}
   if(!p){pad.a=false;pad.dy=0;pad.dx=0;return}
   const bt=i=>!!(p.buttons[i]&&p.buttons[i].pressed),ed=i=>bt(i)&&!pad.prev[i],ax=p.axes[0]||0,ay=p.axes[1]||0;
-  if(!playing){if(ed(0)||ed(9))startGame()}
+  if(!playing){if((ed(0)||ed(9))&&!profOpen())startGame()}
   else{
     if(ed(9))togglePause();
     if(paused&&ed(0))togglePause();
@@ -345,7 +376,7 @@ window.addEventListener('keyup',e=>{
 window.addEventListener('blur',()=>{kb.sp=false;kb.keys={}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&playing&&!paused)togglePause()});
 function drawKB(){
-  if(!kb.on||!playing||b.active)return;
+  if(!kb.on||set.meter||!playing||b.active)return;
   ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillRect(8,36,126,30);
   ctx.fillStyle='#333';ctx.fillRect(14,52,114,8);
   const g=ctx.createLinearGradient(14,0,128,0);g.addColorStop(0,'#3ddc84');g.addColorStop(.6,'#ffd23f');g.addColorStop(1,'#ff4040');
@@ -466,7 +497,7 @@ function drawChar(x,y,o){
   const h2=P.h2||[-9,-40];limb(-2,-54,h2[0],h2[1],5.5,shade(L.skin,-35));
   let l1,l2;if(P.air){l1=[-9,-7];l2=[9,-15]}else{const r=P.run||0;l1=[-5+r,0];l2=[5-r,0]}
   limb(-3,-26,l1[0],l1[1]-4,7,L.skin);limb(3,-26,l2[0],l2[1]-4,7,L.skin);
-  ctx.fillStyle='#f5f5f5';ctx.strokeStyle=OUT;ctx.lineWidth=1.6;
+  ctx.fillStyle=j.s||'#f5f5f5';ctx.strokeStyle=OUT;ctx.lineWidth=1.6;
   [l1,l2].forEach(l=>{ctx.beginPath();ctx.ellipse(l[0]+3,l[1]-2.5,7,3.8,0,0,7);ctx.fill();ctx.stroke()});
   ctx.fillStyle=j.a;ctx.beginPath();ctx.moveTo(-10,-33);ctx.lineTo(10,-33);ctx.lineTo(11,-19);ctx.lineTo(1,-21);ctx.lineTo(-1,-21);ctx.lineTo(-11,-19);ctx.closePath();ctx.fill();ctx.stroke();
   ctx.beginPath();ctx.moveTo(-9,-57);ctx.quadraticCurveTo(-12,-45,-10,-31);ctx.lineTo(10,-31);ctx.quadraticCurveTo(12,-45,9,-57);ctx.closePath();
@@ -487,7 +518,7 @@ function drawChar(x,y,o){
 function drawPlayer(){
   const sc=scF(py0),px=px0-14*sc;
   if(streak>=3){ctx.fillStyle='rgba(255,120,0,'+(.25+.1*Math.sin(performance.now()/90))+')';ctx.beginPath();ctx.ellipse(px,py0-34*sc,32*sc,50*sc,0,0,7);ctx.fill()}
-  drawChar(px,py0,{name:NAMES[pi],sc,pose:{h1:[14,-76],h2:[-9,-42],run:moving?Math.sin(performance.now()/90)*5:0}});
+  drawChar(px,py0,{name:NAMES[pi],sc,pose:{h1:(moving&&!b.active&&playing)?[16,-(20+(.5+.5*Math.cos(performance.now()/105))*30)]:[14,-76],h2:[-9,-42],run:moving?Math.sin(performance.now()/90)*5:0}});
   ctx.fillStyle='#fff';ctx.font='bold 11px Segoe UI,Arial';ctx.textAlign='center';ctx.fillText(NAMES[pi],px,py0+18);
   if(streak>=3){ctx.font='16px Arial';ctx.fillText('\ud83d\udd25',px-16,py0-84*sc)}
 }
@@ -589,31 +620,6 @@ joy.addEventListener('pointermove',e=>{if(e.pointerId===jid)jset(e)});
 const PAL=['#e63946','#f97316','#facc15','#22c55e','#06b6d4','#3b82f6','#8b5cf6','#ec4899','#ffffff','#111111'],PATS=[['solid','Plain'],['stripes','Guhit'],['band','Banda'],['diag','Dayagonal'],['sleeves','Manggas']];
 let jcur=null,jwho=0,flexURL='';
 function profOpen(){return document.getElementById('prof').style.display==='block'}
-function openProf(){if(playing&&!paused)togglePause();jwho=pi;jcur={...lookOf(NAMES[jwho]).j};document.getElementById('prof').style.display='block';renderProf()}
-function closeProf(){document.getElementById('prof').style.display='none';if(jDirty){jDirty=false;jerseyCheer()}}
-function jWho(i){jwho=i;jcur={...lookOf(NAMES[i]).j};renderProf()}
-function jPick(k,v){jcur[k]=v;renderProf()}
-function jNum(d){jcur.n=(jcur.n+d+100)%100;renderProf()}
-function jPreset(id){const q=PRESETS[id];jcur={...jcur,c:q.c,a:q.a,p:q.p};renderProf()}
-function jSave(){cust[NAMES[jwho]]={...jcur};lsSet('vca_cust',cust);jDirty=true;renderProf();document.getElementById('jmsg').textContent='\u2705 Na-save! Isara para magwala ang tropa'}
-function jReset(){delete cust[NAMES[jwho]];lsSet('vca_cust',cust);jcur={...lookOf(NAMES[jwho]).j};jDirty=true;renderProf()}
-function renderProf(){
-  const A=Object.keys(AWARDS),nm=NAMES[jwho];
-  let h='<div style="display:flex;justify-content:space-between;align-items:center"><h2 style="color:#fc0;font-size:1.15rem">\ud83c\udfc6 Profile &amp; Jersey Studio</h2><button onclick="closeProf()" style="flex:none;padding:8px 14px">\u2715</button></div>';
-  h+='<p style="color:#bbb;font-size:.78rem;margin:4px 0">Laro: '+pf.games+' \u00b7 Panalo: '+pf.wins+' \u00b7 Best 3PT: '+pf.best3+' \u00b7 Best Dunk: '+pf.bestD+'</p>';
-  h+='<h3>\ud83c\udfc6 Trophy Case</h3><div class="cs">'+A.map(id=>{const a=AWARDS[id],g=awd[id];return'<div class="tc'+(g?' on':'')+'"><div style="font-size:1.5rem">'+(g?a.i:'\ud83d\udd12')+'</div><b>'+a.n+'</b><small>'+(g?('x'+g.n+' \u00b7 '+g.who+' \u00b7 '+g.last):a.d)+'</small></div>'}).join('')+'</div>';
-  h+='<div class="rw"><button onclick="jFlex()" style="background:#7c3aed">\ud83d\udcf8 I-flex ang awards</button></div><div id="flexbox"></div>';
-  h+='<h3>\ud83d\udc55 Jersey Studio</h3><select onchange="jWho(+this.value)">'+NAMES.map((n,i)=>'<option value="'+i+'"'+(i===jwho?' selected':'')+'>'+n+'</option>').join('')+'</select>';
-  h+='<div style="display:flex;gap:10px;align-items:center;margin-top:8px"><canvas id="jprev" width="150" height="180" style="border-radius:10px;flex:none"></canvas><div style="flex:1;font-size:.8rem;color:#ccc">Numero<div class="rw"><button onclick="jNum(-1)">\u2212</button><b style="font-size:1.3rem;color:#fff">'+jcur.n+'</b><button onclick="jNum(1)">+</button></div>Design<div class="rw">'+PATS.map(q=>'<button class="'+(jcur.p===q[0]?'sel':'')+'" onclick="jPick(\'p\',\''+q[0]+'\')">'+q[1]+'</button>').join('')+'</div></div></div>';
-  const sw=(k)=>'<div class="rw">'+PAL.map(c=>'<button class="sw'+(jcur[k]===c?' sel':'')+'" style="background:'+c+'" onclick="jPick(\''+k+'\',\''+c+'\')"></button>').join('')+'</div>';
-  h+='<div style="font-size:.8rem;color:#ccc">Kulay ng jersey</div>'+sw('c')+'<div style="font-size:.8rem;color:#ccc">Accent / shorts</div>'+sw('a');
-  h+='<div style="font-size:.8rem;color:#ccc;margin-top:6px">Unlocked styles (mula sa awards)</div><div class="rw">'+A.filter(id=>AWARDS[id].p).map(id=>{const q=PRESETS[AWARDS[id].p],ok=!!awd[id];return'<button '+(ok?'':'disabled ')+'onclick="jPreset(\''+AWARDS[id].p+'\')">'+(ok?'':'\ud83d\udd12 ')+q.n+'</button>'}).join('')+'</div>';
-  h+='<div class="rw" style="margin-top:10px"><button onclick="jSave()" style="background:#16a34a">\ud83d\udcbe I-save kay '+nm+'</button><button onclick="jReset()" style="background:#444">Reset</button></div><div id="jmsg" style="font-size:.78rem;color:#9f9"></div>';
-  document.getElementById('profin').innerHTML=h;drawPrev();
-}
-function drawPrev(){const c=document.getElementById('jprev');if(!c)return;const old=ctx;try{ctx=c.getContext('2d');const g=ctx.createLinearGradient(0,0,0,180);g.addColorStop(0,'#2a2a44');g.addColorStop(1,'#c8631f');ctx.fillStyle=g;ctx.fillRect(0,0,150,180);
-  drawChar(75,156,{name:NAMES[jwho],sc:1.9,look:{...lookOf(NAMES[jwho]),j:jcur},pose:{h1:[14,-76],h2:[-9,-42]}});
-  ctx.fillStyle='#fff';ctx.font='bold 12px Arial';ctx.textAlign='center';ctx.fillText(NAMES[jwho]+' #'+jcur.n,75,175)}finally{ctx=old}}
 function makeFlex(){
   const c=document.createElement('canvas');c.width=480;c.height=640;const old=ctx;
   try{ctx=c.getContext('2d');const g=ctx.createLinearGradient(0,0,0,640);g.addColorStop(0,'#1a2a6c');g.addColorStop(.55,'#b21f1f');g.addColorStop(1,'#fdbb2d');ctx.fillStyle=g;ctx.fillRect(0,0,480,640);
@@ -629,13 +635,112 @@ function makeFlex(){
 function jFlex(){const c=makeFlex();flexURL=c.toDataURL('image/png');window.__flexCanvas=c;document.getElementById('flexbox').innerHTML='<img src="'+flexURL+'" style="width:100%;max-width:300px;border-radius:12px;display:block;margin:8px auto"><div class="rw" style="justify-content:center"><button onclick="jDl()">\u2b07 I-download</button><button onclick="jShare()">\ud83d\udce4 I-share</button></div><div style="font-size:.7rem;color:#999;text-align:center">Sa phone: pindutin nang matagal ang larawan para i-save.</div>'}
 function jDl(){const a=document.createElement('a');a.href=flexURL;a.download='VCA-champion.png';document.body.appendChild(a);a.click();a.remove()}
 function jShare(){window.__flexCanvas.toBlob(bl=>{try{const f=new File([bl],'VCA-champion.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],title:'VCA Champion'}).catch(()=>{});else jDl()}catch(e){jDl()}})}
+
+// ===== HUB MENU, METER, DRIBBLE =====
+let set=lsGet('vca_set',{meter:true,diff:1}),hubV='home',role='p',mtxt=null,lastDrib=0;
+const RATE=[.015,.0185,.022],PRE=['Sige, subukan mo!','Hindi yan papasok!','Bantay sarado to!','Tira na, wag kabahan!','Wag kang mag-brick ha!','Kinakabahan ka ba?'],MZ={ideal:.78,w:[.075,.05,.032]},DIFF=['Easy','Normal','Hard'];
+function sfxGreen(){tn('sine',880,1320,.22,.12);tn('sine',1320,1760,.18,.08,.08)}
+function sfxDrib(){tn('sine',150,70,.07,.12)}
+function sfxBuzz(){tn('sawtooth',230,225,.8,.1);tn('square',115,112,.8,.06)}
+function meterW(){return MZ.w[set.diff]*((defS.x-px0)<85?.7:1)}
+function solveShot(){
+  const bx=px0,by=ballY();let best=null;
+  const run=(v,th,tr)=>{let x=bx,y=by,vx=v*Math.cos(th),vy=-v*Math.sin(th),cl=99;
+    for(let i=0;i<1600;i++){const py=y;vy+=G*.25;vx+=wind*.25;x+=vx*.25;y+=vy*.25;
+      if(tr&&y<RIM.y+30){cl=Math.min(cl,Math.hypot(x-RIM.fx,y-RIM.y)-15,Math.hypot(x-RIM.bx,y-RIM.y)-15);const cx=Math.max(BB.x,Math.min(x,BB.x+BB.w)),cy=Math.max(BB.t,Math.min(y,BB.b));cl=Math.min(cl,Math.hypot(x-cx,y-cy)-12)}
+      if(py<RIM.y&&y>=RIM.y&&vy>0)return{off:x-(RIM.fx+RIM.bx)/2,cl};if(y>470)break}
+    return{off:-999,cl}};
+  for(let d=50;d<=84;d+=2){const th=d*Math.PI/180;let lo=4,hi=26;
+    for(let k=0;k<20;k++){const m=(lo+hi)/2;if(run(m,th,false).off<0)lo=m;else hi=m}
+    const v=(lo+hi)/2,r=run(v,th,true);if(Math.abs(r.off)>6)continue;
+    const sc=r.cl-Math.max(0,d-68)*.4;if(!best||sc>best.sc+1)best={v,th,sc}}
+  return best?[best.v,best.th]:[10,76*Math.PI/180]}
+function meterShot(m){
+  const w=meterW(),e=m-MZ.ideal,a=Math.abs(e),S=solveShot(),th=S[1];
+  let v=S[0],lab,col;
+  if(a<=w){v*=1+(Math.random()-.5)*.004;lab='GREEN!';col='80,255,120';sfxGreen()}
+  else if(a<=w*2.6){v*=1+e*.4;lab=e<0?'GOOD (maaga)':'GOOD (huli)';col='255,220,80'}
+  else{v*=1+e;lab=e<0?'MAAGA!':'HULI!';col='255,90,90'}
+  b.vx=v*Math.cos(th);b.vy=-v*Math.sin(th);b.active=true;b.frames=0;b.green=a<=w;b.scored=false;mtxt={t:lab,c:col,life:60};
+}
+function drawMeter(){
+  const sc=scF(py0),px=px0-14*sc,x=px+30*sc,top=py0-112*sc,h=62,w=9;
+  if(kb.charging&&set.meter){
+    const gw=meterW();ctx.fillStyle='rgba(0,0,0,.7)';rr(x-3,top-3,w+6,h+6,5);ctx.fill();
+    ctx.fillStyle='#22e06a';ctx.fillRect(x,top+h*(1-MZ.ideal-gw),w,h*2*gw);
+    ctx.fillStyle='rgba(255,210,63,.9)';ctx.fillRect(x,top+h*(1-kb.pw),w,h*kb.pw);
+    ctx.fillStyle='#fff';ctx.fillRect(x-3,top+h*(1-kb.pw)-1,w+6,2);
+  }
+  if(mtxt){ctx.fillStyle='rgba('+mtxt.c+','+Math.min(1,mtxt.life/20)+')';ctx.font='bold 16px Segoe UI,Arial';ctx.textAlign='center';ctx.fillText(mtxt.t,px+10,top-8-(60-mtxt.life)*.3);if(--mtxt.life<=0)mtxt=null}
+}
+function drawBallX(){
+  if(mode==='dunk'){if(b.active)drawBall();return}
+  if(!(playing||!b.active))return;
+  if(!b.active&&moving&&playing){const t=performance.now(),sc=scF(py0),ph=.5+.5*Math.cos(t/105),y0=b.y;b.y=py0-(12+ph*34)*sc;if(ph>.97&&t-lastDrib>160){lastDrib=t;sfxDrib()}drawBall();b.y=y0;return}
+  drawBall();
+}
+const sbtn=document.getElementById('shootbtn');
+sbtn.addEventListener('pointerdown',e=>{e.preventDefault();kb.sp=true;try{sbtn.setPointerCapture(e.pointerId)}catch(x){}});
+['pointerup','pointercancel'].forEach(n=>sbtn.addEventListener(n,()=>{kb.sp=false}));
+function openHub(v){if(playing&&!paused)togglePause();hubV=v||'home';role='p';syncJ();document.getElementById('prof').style.display='block';renderHub();document.getElementById('prof').scrollTop=0}
+function closeHub(){document.getElementById('prof').style.display='none';if(jDirty){jDirty=false;jerseyCheer()}}
+function openProf(){openHub('trophy')}
+function syncJ(){jwho=role==='p'?pi:di;jcur={...lookOf(NAMES[jwho]).j}}
+function hubView(v){hubV=v;syncJ();renderHub();document.getElementById('prof').scrollTop=0}
+function hubPlay(m){closeHub();startGame(m)}
+function setRole(r){role=r;syncJ();renderHub()}
+function setSel(i){if(role==='p'){pi=i;if(di===pi)di=(di+1)%NAMES.length}else{di=i;if(pi===di)pi=(pi+1)%NAMES.length}ps.value=pi;ds.value=di;lsSet('vca_sel',{pi,di});syncJ();renderHub()}
+function jPick(k,v){jcur[k]=v;renderHub()}
+function jNum(d){jcur.n=(jcur.n+d+100)%100;renderHub()}
+function jPreset(id){const q=PRESETS[id];jcur={...jcur,c:q.c,a:q.a,p:q.p};renderHub()}
+function jSave(){cust[NAMES[jwho]]={...jcur};lsSet('vca_cust',cust);jDirty=true;renderHub();document.getElementById('jmsg').textContent='\u2705 Na-save! Suot na ito sa court'}
+function jReset(){delete cust[NAMES[jwho]];lsSet('vca_cust',cust);jDirty=true;syncJ();renderHub()}
+function setOpt(k,v){set[k]=v;lsSet('vca_set',set);renderHub()}
+function togAs(){const e=document.getElementById('as');e.checked=!e.checked;renderHub()}
+function tile(i,t,sub,fn){return'<button class="tile" onclick="'+fn+'"><span>'+i+'</span><div><b>'+t+'</b><small>'+sub+'</small></div></button>'}
+function studio(){
+  const sw=k=>'<div class="rw">'+PAL.map(c=>'<button class="sw'+(jcur[k]===c?' sel':'')+'" style="background:'+c+'" onclick="jPick(\''+k+'\',\''+c+'\')"></button>').join('')+'</div>';
+  let h='<div style="display:flex;gap:10px;align-items:center;margin-top:8px"><canvas id="jprev" width="150" height="180" style="border-radius:10px;flex:none"></canvas><div style="flex:1;font-size:.8rem;color:#ccc">Numero<div class="rw"><button onclick="jNum(-1)">\u2212</button><b style="font-size:1.3rem;color:#fff">'+jcur.n+'</b><button onclick="jNum(1)">+</button></div>Design<div class="rw">'+PATS.map(q=>'<button class="'+(jcur.p===q[0]?'sel':'')+'" onclick="jPick(\'p\',\''+q[0]+'\')">'+q[1]+'</button>').join('')+'</div></div></div>';
+  h+='<div class="lb">Kulay ng jersey</div>'+sw('c')+'<div class="lb">Accent / shorts</div>'+sw('a')+'<div class="lb">\ud83d\udc5f Sapatos</div>'+sw('s');
+  h+='<div class="lb">Unlocked styles (mula sa awards)</div><div class="rw">'+Object.keys(AWARDS).filter(id=>AWARDS[id].p).map(id=>{const q=PRESETS[AWARDS[id].p],ok=!!awd[id];return'<button '+(ok?'':'disabled ')+'onclick="jPreset(\''+AWARDS[id].p+'\')">'+(ok?'':'\ud83d\udd12 ')+q.n+'</button>'}).join('')+'</div>';
+  h+='<div class="rw" style="margin-top:10px"><button onclick="jSave()" style="background:#16a34a">\ud83d\udcbe I-save kay '+NAMES[jwho]+'</button><button onclick="jReset()" style="background:#444">Reset</button></div><div id="jmsg" style="font-size:.78rem;color:#9f9"></div>';
+  return h}
+function renderHub(){
+  let h='<div style="display:flex;justify-content:space-between;align-items:flex-end"><div class="hlogo">VCA <span>HOOPS</span><small>MyCAREER \u00b7 TROPA EDITION</small></div>'+(hubV!=='home'?'<button onclick="hubView(\'home\')" style="flex:none;padding:8px 14px">\u25c0 Back</button>':(playing?'<button onclick="closeHub()" style="flex:none;padding:8px 14px">\u2715</button>':''))+'</div>';
+  if(hubV==='home'){
+    const lj=lookOf(NAMES[pi]).j;
+    h+='<div class="hmain"><canvas id="hprev" width="190" height="230"></canvas><div class="pcard"><div style="color:#ff9a3d;font-size:.68rem;letter-spacing:2px">PLAYER</div><b style="font-size:1.4rem">'+NAMES[pi]+'</b> <span style="color:#aaa">#'+lj.n+'</span><div style="color:#8cf;margin-top:6px;font-size:.78rem">\ud83d\udee1 Defender: '+NAMES[di]+'</div><div style="margin-top:8px;font-size:.74rem;color:#bbb">Laro '+pf.games+' \u00b7 Panalo '+pf.wins+'<br>Best 3PT '+pf.best3+' \u00b7 Best Dunk '+pf.bestD+'<br>\ud83c\udfc6 Trophies: '+Object.keys(awd).length+'/'+Object.keys(AWARDS).length+'</div></div></div>';
+    h+=tile('\ud83c\udfc0','3-Point Shootout','Maka-50 pts sa 2 minuto \u00b7 Honda ADV 160',"hubPlay('shoot')")+tile('\ud83d\udca5','Dunk Contest','5 dunks \u00b7 huhusgahan ng tropa \u00b7 target 40',"hubPlay('dunk')")+tile('\ud83d\udc55','Roster &amp; Customize','Pumili ng player, jersey at sapatos',"hubView('roster')")+tile('\ud83c\udfc6','Trophy Room','Awards, jersey unlocks at flex card',"hubView('trophy')")+tile('\u2699\ufe0f','Settings','Shot meter, hirap, tunog',"hubView('settings')");
+  }else if(hubV==='roster'){
+    h+='<div class="rw" style="margin-top:10px"><button class="'+(role==='p'?'sel':'')+'" onclick="setRole(\'p\')">\ud83d\udc64 Player: '+NAMES[pi]+'</button><button class="'+(role==='d'?'sel':'')+'" onclick="setRole(\'d\')">\ud83d\udee1 Defender: '+NAMES[di]+'</button></div>';
+    h+='<div class="chips">'+NAMES.map((n,i)=>{const j=lookOf(n).j,cur=(role==='p'?pi:di)===i,tk=(role==='p'?di:pi)===i;return'<button class="chip'+(cur?' sel':'')+'" '+(tk?'disabled ':'')+'style="background:'+j.c+';color:'+textOn(j.c)+'" onclick="setSel('+i+')">#'+j.n+' '+n+'</button>'}).join('')+'</div>'+studio();
+  }else if(hubV==='trophy'){
+    h+='<p style="color:#bbb;font-size:.78rem;margin:8px 0">Laro: '+pf.games+' \u00b7 Panalo: '+pf.wins+' \u00b7 Best 3PT: '+pf.best3+' \u00b7 Best Dunk: '+pf.bestD+'</p><div class="cs">'+Object.keys(AWARDS).map(id=>{const a=AWARDS[id],g=awd[id];return'<div class="tc'+(g?' on':'')+'"><div style="font-size:1.5rem">'+(g?a.i:'\ud83d\udd12')+'</div><b>'+a.n+'</b><small>'+(g?('x'+g.n+' \u00b7 '+g.who+' \u00b7 '+g.last):a.d)+'</small></div>'}).join('')+'</div><div class="rw"><button onclick="jFlex()" style="background:#7c3aed">\ud83d\udcf8 I-flex ang awards</button></div><div id="flexbox"></div>';
+  }else{
+    const A=document.getElementById('as').checked;
+    h+='<div class="setrow">\ud83c\udfaf Shot style<div class="rw"><button class="'+(set.meter?'sel':'')+'" onclick="setOpt(\'meter\',true)">Meter (2K)</button><button class="'+(!set.meter?'sel':'')+'" onclick="setOpt(\'meter\',false)">Manual power</button></div></div>';
+    h+='<div class="setrow">\u23f1 Hirap ng GREEN zone<div class="rw">'+DIFF.map((d,i)=>'<button class="'+(set.diff===i?'sel':'')+'" onclick="setOpt(\'diff\','+i+')">'+d+'</button>').join('')+'</div></div>';
+    h+='<div class="setrow">\ud83d\udd0a Tunog<div class="rw"><button class="'+(!mute?'sel':'')+'" onclick="toggleMute();renderHub()">'+(mute?'Naka-mute':'Naka-on')+'</button></div></div>';
+    h+='<div class="setrow">\ud83d\udd00 Auto-palit ng player/defender kada tira<div class="rw"><button class="'+(A?'sel':'')+'" onclick="togAs()">'+(A?'On':'Off')+'</button></div></div>';
+  }
+  document.getElementById('profin').innerHTML=h;drawPrevs();
+}
+function drawPrevs(){
+  [['hprev',190,230,2.15,pi,null],['jprev',150,180,1.9,jwho,jcur]].forEach(q=>{
+    const c=document.getElementById(q[0]);if(!c)return;const w=q[1],h=q[2],who=q[4],jc=q[5],old=ctx;
+    try{ctx=c.getContext('2d');const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#2a2a44');g.addColorStop(.7,'#3a2a4a');g.addColorStop(1,'#c8631f');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+      ctx.fillStyle='rgba(255,255,255,.08)';ctx.beginPath();ctx.arc(w/2,h*.55,w*.42,0,7);ctx.fill();
+      const L=lookOf(NAMES[who]);drawChar(w/2,h-26,{name:NAMES[who],sc:q[3],look:jc?{...L,j:jc}:L,pose:{h1:[14,-76],h2:[-9,-42]}});
+      ctx.fillStyle='#fff';ctx.font='bold 13px Arial';ctx.textAlign='center';ctx.fillText(NAMES[who]+' #'+(jc?jc.n:L.j.n),w/2,h-8)}finally{ctx=old}});
+}
 const ps=document.getElementById('ps'),ds=document.getElementById('ds');
 NAMES.forEach((n,i)=>{ps.add(new Option(n,i));ds.add(new Option(n,i))});
 ps.value=pi;ds.value=di;
 ps.onchange=()=>{ps.blur();pi=+ps.value;if(di===pi){di=(pi+1)%NAMES.length;ds.value=di}};
 ds.onchange=()=>{ds.blur();di=+ds.value;if(pi===di){pi=(di+1)%NAMES.length;ps.value=pi}};
 try{unl=JSON.parse(localStorage.getItem('vca_unl')||'{}')||{}}catch(e){}
-setSpot('wing');loop();
+{const sel=lsGet('vca_sel',{pi:0,di:1});pi=Math.min(sel.pi,NAMES.length-1);di=Math.min(sel.di,NAMES.length-1);if(pi===di)di=(pi+1)%NAMES.length;ps.value=pi;ds.value=di}
+setSpot('wing');loop();openHub('home');
 </script>
 </body>
 </html>
